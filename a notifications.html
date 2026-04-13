@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>إبداع ايفنتس | IBDA Events</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --bg: #05070a; --card: #1e1f20; --primary: #86ff7b; --text: #e3e3e3; --border: #3c4043; }
+        body { background-color: var(--bg); color: var(--text); font-family: 'Cairo', sans-serif; margin: 0; padding: 20px; }
+        .container { max-width: 650px; margin: 0 auto; }
+        
+        /* كارت إنشاء منشور (للأدمن فقط أو للكل حسب رغبتك) */
+        .create-post { background: var(--card); border-radius: 15px; padding: 15px; margin-bottom: 25px; border: 1px solid var(--border); }
+        .create-post textarea { width: 100%; background: #0d1117; border: 1px solid var(--border); border-radius: 10px; color: white; padding: 12px; resize: none; outline: none; }
+        .create-post button { background: var(--primary); color: #000; border: none; padding: 8px 20px; border-radius: 8px; font-weight: bold; cursor: pointer; margin-top: 10px; float: left; }
+
+        /* كارت الإيفنت */
+        .event-card { background: var(--card); border-radius: 15px; border: 1px solid var(--border); margin-bottom: 20px; overflow: hidden; animation: fadeIn 0.5s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .event-header { padding: 15px; display: flex; align-items: center; gap: 12px; }
+        .admin-avatar { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary); }
+        .admin-info b { color: var(--primary); display: block; font-size: 0.95rem; }
+        .admin-info small { color: #888; font-size: 0.75rem; }
+
+        .event-body { padding: 0 15px 15px; font-size: 0.95rem; line-height: 1.6; }
+        
+        .event-actions { display: flex; border-top: 1px solid #333; border-bottom: 1px solid #333; padding: 5px; }
+        .action-btn { flex: 1; background: none; border: none; color: #ccc; padding: 10px; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; transition: 0.3s; }
+        .action-btn:hover { background: rgba(255,255,255,0.05); color: var(--primary); }
+        .action-btn.liked { color: #ff4757; }
+
+        .comments-section { background: rgba(0,0,0,0.2); padding: 15px; }
+        .comment-item { background: #2d2e30; padding: 10px; border-radius: 10px; margin-bottom: 8px; font-size: 0.85rem; }
+        .comment-item b { color: var(--primary); margin-left: 5px; }
+
+        .comment-input-area { display: flex; gap: 10px; margin-top: 10px; }
+        .comment-input-area input { flex: 1; background: #0d1117; border: 1px solid var(--border); border-radius: 20px; padding: 8px 15px; color: white; outline: none; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2 style="text-align: center; color: var(--primary);"><i class="fas fa-star"></i> إبداع ايفنتس</h2>
+
+    <div class="create-post" id="admin-publish-area">
+        <textarea id="post-text" placeholder="ماذا يدور في ذهنك يا مستر؟"></textarea>
+        <button onclick="publishEvent()">نشر الإيفنت</button>
+        <div style="clear: both;"></div>
+    </div>
+
+    <div id="events-feed"></div>
+</div>
+
+<script type="module">
+    import { db } from './js.js'; // تأكد أن ملف js.js يعمل export لـ db
+    import { collection, addDoc, onSnapshot, query, orderBy, serverTimestamp, updateDoc, doc, arrayUnion } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    const user = JSON.parse(localStorage.getItem('studentInfo')) || { name: "طالب مجهول" };
+
+    // 1. وظيفة النشر
+    window.publishEvent = async () => {
+        const text = document.getElementById('post-text').value;
+        if(!text.trim()) return;
+        await addDoc(collection(db, "events"), {
+            text: text,
+            author: "إبداع تيم",
+            likes: [],
+            comments: [],
+            timestamp: serverTimestamp()
+        });
+        document.getElementById('post-text').value = '';
+    };
+
+    // 2. عرض المنشورات لحظياً
+    const q = query(collection(db, "events"), orderBy("timestamp", "desc"));
+    onSnapshot(q, (snapshot) => {
+        const feed = document.getElementById('events-feed');
+        feed.innerHTML = '';
+        snapshot.forEach(res => {
+            const data = res.data();
+            const eventId = res.id;
+            const isLiked = data.likes?.includes(user.phone);
+
+            const card = `
+                <div class="event-card">
+                    <div class="event-header">
+                        <img src="logo.png" class="admin-avatar">
+                        <div class="admin-info">
+                            <b>${data.author} <i class="fas fa-check-circle" style="color:#3b82f6"></i></b>
+                            <small>تحديث رسمي</small>
+                        </div>
+                    </div>
+                    <div class="event-body">${data.text}</div>
+                    
+                    <div class="event-actions">
+                        <button class="action-btn ${isLiked ? 'liked' : ''}" onclick="toggleLike('${eventId}')">
+                            <i class="${isLiked ? 'fas' : 'far'} fa-heart"></i> ${data.likes?.length || 0}
+                        </button>
+                        <button class="action-btn" onclick="document.getElementById('input-${eventId}').focus()">
+                            <i class="far fa-comment"></i> ${data.comments?.length || 0}
+                        </button>
+                    </div>
+
+                    <div class="comments-section">
+                        <div id="comments-list-${eventId}">
+                            ${data.comments?.map(c => `<div class="comment-item"><b>${c.user}:</b> ${c.text}</div>`).join('')}
+                        </div>
+                        <div class="comment-input-area">
+                            <input type="text" id="input-${eventId}" placeholder="اكتب تعليقك...">
+                            <button onclick="addComment('${eventId}')" style="background:none; border:none; color:var(--primary); cursor:pointer">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            feed.innerHTML += card;
+        });
+    });
+
+    // 3. وظيفة اللايك
+    window.toggleLike = async (id) => {
+        const eventRef = doc(db, "events", id);
+        // ملاحظة: هنا نحتاج منطق لإضافة أو حذف اللايك (للبساطة استخدمنا إضافة حالياً)
+        await updateDoc(eventRef, { likes: arrayUnion(user.phone || "guest") });
+    };
+
+    // 4. وظيفة التعليق
+    window.addComment = async (id) => {
+        const input = document.getElementById(`input-${id}`);
+        if(!input.value.trim()) return;
+        const eventRef = doc(db, "events", id);
+        await updateDoc(eventRef, {
+            comments: arrayUnion({
+                user: user.name,
+                text: input.value,
+                time: new Date()
+            })
+        });
+        input.value = '';
+    };
+</script>
+</body>
+</html>

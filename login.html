@@ -1,0 +1,83 @@
+  <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تسجيل الدخول | EBDA</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root { --main: #86ff7b; --bg: #0a0a0a; --card: #161616; }
+        body { background: var(--bg); color: white; font-family: 'Cairo', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
+        .login-card { background: var(--card); padding: 30px; border-radius: 20px; width: 90%; max-width: 400px; border: 1px solid #333; }
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 10px; background: #222; border: none; color: #888; border-radius: 10px; cursor: pointer; transition: 0.3s; }
+        .tab-btn.active { background: var(--main); color: black; font-weight: bold; }
+        .input-group { margin-bottom: 15px; }
+        input { width: 100%; padding: 12px; background: #1a1a1a; border: 1px solid #333; border-radius: 10px; color: white; box-sizing: border-box; }
+        .main-btn { width: 100%; padding: 15px; background: var(--main); border: none; border-radius: 10px; font-weight: bold; cursor: pointer; font-size: 16px; }
+        .back-home { position: absolute; top: 20px; right: 20px; color: var(--main); text-decoration: none; display: flex; align-items: center; gap: 5px; }
+    </style>
+</head>
+<body>
+
+    <a href="index.html" class="back-home"><i class="fas fa-home"></i> الرئيسية</a>
+
+    <div class="login-card">
+        <div class="tabs">
+            <button id="tab-login" class="tab-btn">تسجيل دخول</button>
+            <button id="tab-register" class="tab-btn active">إنشاء حساب</button>
+        </div>
+
+        <h2 style="text-align: center;">Welcome to <span style="color: var(--main);">EBDA</span></h2>
+        
+        <form id="auth-form">
+            <div id="reg-fields-extra">
+                <div class="input-group">
+                    <input type="text" id="studentName" placeholder="الاسم بالكامل">
+                </div>
+            </div>
+
+            <div class="input-group">
+                <input type="email" id="studentEmail" placeholder="البريد الإلكتروني" required>
+            </div>
+            
+            <div class="input-group">
+                <input type="password" id="studentPass" placeholder="كلمة السر" required>
+            </div>
+
+            <button type="submit" id="submitBtn" class="main-btn">إنشاء حساب</button>
+        </form>
+    </div>
+
+<script type="module">
+    // استيراد الدالة من ملف الـ JS
+    import { handleAuth } from './js.js';
+
+    const tabLogin = document.getElementById('tab-login');
+    const tabReg = document.getElementById('tab-register');
+    const regFields = document.getElementById('reg-fields-extra');
+    const submitBtn = document.getElementById('submitBtn');
+    const authForm = document.getElementById('auth-form');
+
+    tabLogin.onclick = () => {
+        tabLogin.classList.add('active');
+        tabReg.classList.remove('active');
+        regFields.style.display = 'none';
+        submitBtn.innerText = 'تسجيل دخول';
+    };
+
+    tabReg.onclick = () => {
+        tabReg.classList.add('active');
+        tabLogin.classList.remove('active');
+        regFields.style.display = 'block';
+        submitBtn.innerText = 'إنشاء حساب';
+    };
+
+authForm.onsubmit = async (e) => {
+    e.preventDefault();
+    // نادى الدالة باسمها مباشرة لأنك عملت لها import فوق
+    await handleAuth(); 
+};
+</script>
+</body>
+</html>

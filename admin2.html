@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>لوحة تحكم إبداع تيم</title>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore-compat.js"></script>
+</head>
+<body style="background: #0d1117; color: white; text-align: center; font-family: sans-serif;">
+
+    <h2>إضافة درس جديد 🚀</h2>
+    <div style="background: #161b22; padding: 20px; display: inline-block; border-radius: 10px;">
+        <input type="text" id="vTitle" placeholder="عنوان الفيديو" style="display:block; margin: 10px; padding: 10px; width: 250px;">
+        <input type="text" id="vUrl" placeholder="رابط اليوتيوب" style="display:block; margin: 10px; padding: 10px; width: 250px;">
+        <select id="vLang" style="display:block; margin: 10px; padding: 10px; width: 275px;">
+            <option value="HTML">HTML</option>
+            <option value="CSS">CSS</option>
+            <option value="JS">JavaScript</option>
+        </select>
+        <button onclick="uploadVideo()" style="padding: 10px 20px; background: #2ea043; color: white; border: none; cursor: pointer;">نشر الفيديو</button>
+    </div>
+
+    <script>
+        // إعدادات Firebase (ضع بيانات مشروعك eee1 هنا)
+        const firebaseConfig = {
+            apiKey: "AIza...", 
+            projectId: "eee1", 
+        };
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        async function uploadVideo() {
+            const title = document.getElementById('vTitle').value;
+            const url = document.getElementById('vUrl').value;
+            const lang = document.getElementById('vLang').value;
+
+            if(!title || !url) return alert("اكمل البيانات!");
+
+            try {
+                // هذا السطر سينشئ القائمة 'courses' تلقائياً إذا لم تكن موجودة
+                await db.collection("courses").add({
+                    title: title,
+                    url: url,
+                    lang: lang,
+                    createdAt: firebase.firestore.FieldValue.serverTimestamp()
+                });
+                alert("تم الحفظ! اذهب للفيربيز ستجد قائمة 'courses' ظهرت.");
+            } catch (e) { alert("خطأ: " + e.message); }
+        }
+    </script>
+</body>
+</html>

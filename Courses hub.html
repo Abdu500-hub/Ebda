@@ -1,0 +1,493 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>كورس الشبكات والأمن السيبراني | Ebda Project</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-color: #2ecca4;
+            --bg-dark: #0a0c10;
+            --card-bg: #161b22;
+            --border-color: #30363d;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+        }
+
+        .course-container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        /* ستايل أزرار التبديل (Tabs) */
+        .playlist-tabs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 35px;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            padding: 12px 35px;
+            border: 2px solid var(--main-color);
+            background: transparent;
+            color: var(--main-color);
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .tab-btn.active {
+            background: var(--main-color);
+            color: #000;
+            box-shadow: 0 0 20px rgba(46, 204, 164, 0.3);
+        }
+
+        .tab-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(46, 204, 164, 0.2);
+        }
+
+        /* حاوية الدروس */
+        .lessons-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .lesson-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            cursor: pointer;
+            transition: 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .lesson-card:hover {
+            border-color: var(--main-color);
+            background: #1c2128;
+            transform: scale(1.02);
+        }
+
+        .lesson-number {
+            background: rgba(46, 204, 164, 0.1);
+            color: var(--main-color);
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2rem;
+            flex-shrink: 0;
+        }
+
+        .lesson-info h3 {
+            margin: 0;
+            font-size: 1.1rem;
+            color: #fff;
+        }
+
+        .lesson-info p {
+            margin: 5px 0 0;
+            font-size: 0.9rem;
+            color: #8b949e;
+        }
+
+        /* تمييز فيديو المشروع */
+        .project-card {
+            border: 2px solid var(--main-color) !important;
+            background: rgba(46, 204, 164, 0.05) !important;
+            grid-column: 1 / -1; /* يأخذ العرض بالكامل */
+        }
+
+        .project-card .lesson-number {
+            background: var(--main-color);
+            color: #000;
+        }
+
+        .video-player-placeholder {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #000;
+            border-radius: 20px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid var(--border-color);
+        }
+        /* تنسيق الهيدر */
+.main-header {
+    background: #0d1117;
+    border-bottom: 1px solid #30363d;
+    padding: 15px 0;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+}
+
+.header-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 20px;
+}
+
+.header-actions {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+/* زر الجرس */
+.notification-btn {
+    position: relative;
+    cursor: pointer;
+    font-size: 1.3rem;
+    color: #8b949e;
+    transition: 0.3s;
+}
+
+.notification-btn:hover {
+    color: var(--main-color);
+}
+
+.notif-dot {
+    position: absolute;
+    top: -2px;
+    right: -2px;
+    width: 10px;
+    height: 10px;
+    background: #ff4b4b;
+    border-radius: 50%;
+    border: 2px solid #0d1117;
+}
+
+/* المنيو الجانبي */
+.sidebar {
+    position: fixed;
+    right: -280px; /* مخفي في البداية */
+    top: 0;
+    width: 280px;
+    height: 100%;
+    background: #161b22;
+    z-index: 2000;
+    transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: -10px 0 30px rgba(0,0,0,0.5);
+    padding: 20px;
+}
+
+.sidebar.active {
+    right: 0;
+}
+
+.sidebar-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+    color: var(--main-color);
+}
+
+.side-links {
+    list-style: none;
+    padding: 0;
+}
+
+.side-links li a {
+    display: block;
+    padding: 15px;
+    color: #e6edf3;
+    text-decoration: none;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    transition: 0.3s;
+    margin-bottom: 5px;
+}
+
+.side-links li a:hover {
+    background: rgba(46, 204, 164, 0.1);
+    color: var(--main-color);
+}
+
+.side-links li a i {
+    margin-left: 10px;
+    width: 20px;
+}
+
+/* الطبقة الشفافة خلف المنيو */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.6);
+    display: none;
+    z-index: 1500;
+}
+
+.menu-trigger {
+    font-size: 1.5rem;
+    cursor: pointer;
+    color: var(--main-color);
+}
+
+.dash-link {
+    background: var(--main-color);
+    color: #000 !important;
+    padding: 8px 18px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+.quiz-btn {
+    position: relative;
+    padding: 15px 40px;
+    background: #161b22;
+    color: var(--main-color);
+    border: 2px solid var(--main-color);
+    border-radius: 12px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    font-family: 'Cairo', sans-serif;
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.4s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 0 10px rgba(46, 204, 164, 0.1);
+}
+
+/* تأثير اللمعة المتحركة */
+.btn-shine {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(
+        120deg,
+        transparent,
+        rgba(46, 204, 164, 0.4),
+        transparent
+    );
+    transition: all 0.6s;
+    animation: shine-animation 3s infinite;
+}
+
+@keyframes shine-animation {
+    0% { left: -100%; }
+    20% { left: 100%; }
+    100% { left: 100%; }
+}
+
+.quiz-btn:hover {
+    background: var(--main-color);
+    color: #000;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 0 25px rgba(46, 204, 164, 0.4);
+}
+
+.quiz-btn i {
+    font-size: 1.4rem;
+    transition: 0.3s;
+}
+
+.quiz-btn:hover i {
+    transform: rotate(20deg);
+}
+    </style>
+</head>
+<body class="course-page">
+
+<header class="main-header">
+    <div class="header-container">
+        <div class="menu-trigger" onclick="toggleSidebar()">
+            <i class="fas fa-bars"></i>
+        </div>
+
+        <div class="logo">EBDA <span>PROJECT</span></div>
+
+        <div class="header-actions">
+            <div class="notification-btn" onclick="location.href='chat.html'">
+                <i class="fas fa-bell"></i>
+                <span class="notif-dot"></span> </div>
+            
+            <a href="dashboard.html" class="dash-link">Dashboard</a>
+            
+        </div>
+    </div>
+</header>
+
+<div id="sideMenu" class="sidebar">
+    <div class="sidebar-header">
+        <h3>Menu</h3>
+        <i class="fas fa-times" onclick="toggleSidebar()"></i>
+    </div>
+    <ul class="side-links">
+        <li><a href="index.html"><i class="fas fa-home"></i> الرئيسية</a></li>
+        <li><a href="cors.html"><i class="fas fa-book"></i> الكورسات</a></li>
+        <li><a href="dashboard.html"><i class="fas fa-user"></i> حسابي</a></li>
+        <div class="quiz-container" style="text-align: center; margin-bottom: 30px;">
+    <button class="quiz-btn" onclick="startQuiz()">
+        <i class="fas fa-vial"></i>
+        <span>اختبر نفسك الآن (Quiz)</span>
+        <div class="btn-shine"></div>
+    </button>
+</div>
+
+        <hr style="border: 0.5px solid #30363d; margin: 10px 0;">
+        <li><a href="#" style="color: #ff4b4b;"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
+    </ul>
+</div>
+<div id="overlay" class="overlay" onclick="toggleSidebar()"></div>
+<div class="course-container">
+    <div class="video-player-placeholder" id="mainVideoPlayer">
+        <div style="text-align: center;">
+            <i class="fas fa-play-circle" style="font-size: 4rem; color: var(--main-color); opacity: 0.5;"></i>
+            <p style="margin-top: 15px; color: #8b949e;">اختر درساً للبدء في المشاهدة</p>
+        </div>
+    </div>
+
+    <div class="playlist-tabs">
+        <button class="tab-btn active" onclick="switchTab('network')">Network</button>
+        <button class="tab-btn" onclick="switchTab('cyber')">Cyber Security</button>
+    </div>
+
+    <div id="network-list" class="lessons-grid">
+        <div class="lesson-card" onclick="playVid('net1')">
+            <div class="lesson-number">01</div>
+            <div class="lesson-info">
+                <h3>What is the Internet?</h3>
+                <p>ما هو الإنترنت وكيف يعمل فعلياً؟</p>
+            </div>
+        </div>
+        <div class="lesson-card" onclick="playVid('net2')">
+            <div class="lesson-number">02</div>
+            <div class="lesson-info">
+                <h3>DNS & Servers</h3>
+                <p>شرح نظام الأسماء والخوادم</p>
+            </div>
+        </div>
+        <div class="lesson-card" onclick="playVid('net3')">
+            <div class="lesson-number">03</div>
+            <div class="lesson-info">
+                <h3>LAN Networks</h3>
+                <p>أنواع الشبكات المحلية وطرق ربطها</p>
+            </div>
+        </div>
+        <div class="lesson-card" onclick="playVid('net4')">
+            <div class="lesson-number">04</div>
+            <div class="lesson-info">
+                <h3>What is WAN?</h3>
+                <p>الشبكات الواسعة والربط بين المدن</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="cyber-list" class="lessons-grid" style="display: none;">
+        <div class="lesson-card" onclick="playVid('cy1')">
+            <div class="lesson-number">01</div>
+            <div class="lesson-info">
+                <h3>Introduction to Security</h3>
+                <p>مفاهيم الأمن السيبراني الأساسية</p>
+            </div>
+        </div>
+        <div class="lesson-card" onclick="playVid('cy2')">
+            <div class="lesson-number">02</div>
+            <div class="lesson-info">
+                <h3>Social Engineering</h3>
+                <p>كيف يتم اختراق البشر؟</p>
+            </div>
+        </div>
+        <div class="lesson-card" onclick="playVid('cy3')">
+            <div class="lesson-number">03</div>
+            <div class="lesson-info">
+                <h3>Malware & Viruses</h3>
+                <p>أنواع البرمجيات الخبيثة وطرق الوقاية</p>
+            </div>
+        </div>
+        <div class="lesson-card" onclick="playVid('cy4')">
+            <div class="lesson-number">04</div>
+            <div class="lesson-info">
+                <h3>Password Safety</h3>
+                <p>تأمين الحسابات وكلمات المرور</p>
+            </div>
+        </div>
+        <div class="lesson-card project-card" onclick="playVid('full_project')">
+            <div class="lesson-number"><i class="fas fa-star"></i></div>
+            <div class="lesson-info">
+                <h3>Full Project Video</h3>
+                <p>فيديو المشروع الكامل وتطبيق كل ما تعلمته في الكورس</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function switchTab(tab) {
+        // تغيير حالة الأزرار
+        const btns = document.querySelectorAll('.tab-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        event.target.classList.add('active');
+
+        // التبديل بين القوائم
+        if (tab === 'network') {
+            document.getElementById('network-list').style.display = 'grid';
+            document.getElementById('cyber-list').style.display = 'none';
+        } else {
+            document.getElementById('network-list').style.display = 'none';
+            document.getElementById('cyber-list').style.display = 'grid';
+        }
+    }
+
+    function playVid(vidId) {
+        const player = document.getElementById('mainVideoPlayer');
+        // هنا يمكنك وضع كود الـ Iframe الخاص بفايربيز أو يوتيوب
+        player.innerHTML = `<h2 style="color: var(--main-color);">جاري تشغيل الدرس: ${vidId}</h2>`;
+        
+        // النزول لمشغل الفيديو تلقائياً
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    function toggleSidebar() {
+    const sidebar = document.getElementById('sideMenu');
+    const overlay = document.getElementById('overlay');
+    
+    sidebar.classList.toggle('active');
+    
+    if (sidebar.classList.contains('active')) {
+        overlay.style.display = 'block';
+    } else {
+        overlay.style.display = 'none';
+    }
+}
+</script>
+
+</body>
+</html>

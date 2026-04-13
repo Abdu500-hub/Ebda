@@ -1,0 +1,57 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us | Ebda Project</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;800&display=swap" rel="stylesheet">
+</head>
+<body>
+ 
+
+    <header>
+        <div class="container nav-wrapper">
+            <div class="logo">EBDA <span>PROJECT</span></div>
+            <nav>
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="about.html" class="active">About us</a></li>
+                    <li><a href="#">Courses</a></li>
+                    <li><a href="#" class="btn-login">Login</a></li>
+                    <div class="notification-wrapper" style="position: relative; cursor: pointer;" onclick="toggleChat()">
+    <i class="fas fa-bell" style="font-size: 1.5rem; color: #fff;"></i>
+    <span id="notif-dot" style="display: none; position: absolute; top: -5px; right: -5px; background: red; width: 10px; height: 10px; border-radius: 50%; border: 2px solid #000;"></span>
+</div>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section class="about-section">
+        <div class="container">
+            <div class="about-content">
+                <span class="badge">Our Story</span>
+                <h1>Who We <span class="highlight">Are?</span></h1>
+                <p>Ebda Project is a leading platform in programming education, aiming to build a generation of creative developers using the latest AI technologies.</p>
+            </div>
+
+            <div class="about-grid">
+                <div class="about-card">
+                    <div class="icon">🚀</div>
+                    <h3>Our Mission</h3>
+                    <p>To provide practical, high-quality coding education for everyone.</p>
+                </div>
+                <div class="about-card">
+                    <div class="icon">💡</div>
+                    <h3>Our Vision</h3>
+                    <p>Leading the digital transformation in the Middle East through tech education.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>

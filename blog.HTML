@@ -1,0 +1,231 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مجتمع إبداع | EBDA Community</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-body: #05070a;
+            --gemini-bg: #1e1f20;
+            --gemini-border: #3c4043;
+            --accent: #86ff7b;
+            --text-main: #e3e3e3;
+        }
+
+        body {
+            background-color: var(--bg-body);
+            color: var(--text-main);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        /* زر العودة */
+        .back-nav {
+            width: 100%;
+            padding: 15px 25px;
+            position: fixed;
+            top: 0;
+            background: rgba(5, 7, 10, 0.8);
+            backdrop-filter: blur(10px);
+            z-index: 1001;
+        }
+
+        .back-nav a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* منطقة عرض التدوينات */
+        .feed-container {
+            width: 100%;
+            max-width: 700px;
+            margin-top: 80px;
+            margin-bottom: 150px; /* مساحة للحقل العائم */
+            padding: 20px;
+            box-sizing: border-box;
+        }
+
+        .post-card {
+            background: #111418;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border: 1px solid #1a1a1a;
+        }
+
+        .post-card h3 { color: var(--accent); margin-top: 0; }
+        .post-card p { line-height: 1.6; color: #ccc; }
+        .post-card img, .post-card video { 
+            width: 100%; 
+            border-radius: 12px; 
+            margin-top: 15px; 
+            border: 1px solid #333;
+        }
+
+        /* حقل إدخال Gemini العائم */
+        .gemini-footer {
+            position: fixed;
+            bottom: 20px;
+            width: 90%;
+            max-width: 800px;
+            z-index: 1000;
+        }
+
+        .gemini-wrapper {
+            background: var(--gemini-bg);
+            border: 1px solid var(--gemini-border);
+            border-radius: 28px;
+            padding: 10px 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            transition: 0.3s;
+        }
+
+        .gemini-wrapper:focus-within {
+            border-color: var(--accent);
+            background: #28292a;
+        }
+
+        /* معاينة الصور/الفيديو المرفق */
+        #attachment-preview {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        #attachment-preview div {
+            position: relative;
+            width: 80px;
+            height: 80px;
+        }
+        #attachment-preview img, #attachment-preview video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px;
+            border: 1px solid var(--accent);
+        }
+
+        textarea {
+            width: 100%;
+            background: transparent;
+            border: none;
+            color: white;
+            font-size: 17px;
+            outline: none;
+            resize: none;
+            padding: 10px 0;
+            font-family: inherit;
+            max-height: 200px;
+        }
+
+        .gemini-tools {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 5px;
+            padding-top: 10px;
+            border-top: 1px solid #333;
+        }
+
+        .media-btns { display: flex; gap: 15px; }
+        
+        .tool-btn {
+            color: #c4c7c5;
+            font-size: 20px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .tool-btn:hover { color: var(--accent); }
+
+        .send-btn {
+            background: var(--accent);
+            color: #000;
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            transition: 0.3s;
+        }
+
+        .send-btn:hover { transform: scale(1.1); background: #b0ffaa; }
+/* تنسيق رأس المنشور */
+.post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; position: relative; }
+.author-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
+.author-info h4 { margin: 0; font-size: 1rem; color: var(--accent); }
+.author-info span { font-size: 0.75rem; color: #888; }
+
+/* زر الحذف (الزبالة) */
+.delete-btn { position: absolute; left: 0; top: 0; background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 1.1rem; }
+
+/* صورة المنشور الكبيرة */
+.post-main-img { width: 100%; border-radius: 12px; margin-top: 10px; max-height: 400px; object-fit: cover; }
+
+/* أزرار التفاعل */
+.post-actions { display: flex; border-top: 1px solid #333; margin-top: 15px; padding-top: 10px; gap: 20px; }
+.post-actions button { background: none; border: none; color: #ccc; cursor: pointer; transition: 0.3s; }
+.post-actions button:hover { color: var(--accent); }
+
+/* قسم التعليقات */
+.comments-section { background: #1a1f26; border-radius: 10px; padding: 10px; margin-top: 10px; }
+.comment-input-area { display: flex; gap: 5px; margin-top: 10px; }
+.comment-input-area input { flex: 1; background: #05070a; border: 1px solid #333; color: white; border-radius: 20px; padding: 5px 15px; }
+    </style>
+</head>
+<body>
+
+    <nav class="back-nav">
+        <a href="dashboard.html"><i class="fas fa-arrow-right"></i> لوحة التحكم</a>
+    </nav>
+
+    <div class="feed-container" id="posts-container">
+        <div style="text-align: center; color: #555; margin-top: 50px;">
+            <i class="fas fa-stream" style="font-size: 40px; margin-bottom: 10px;"></i>
+            <p>لا توجد منشورات حالياً، كن أول من ينشر!</p>
+        </div>
+    </div>
+
+    <div class="gemini-footer">
+        <div class="gemini-wrapper">
+            <div id="attachment-preview"></div>
+
+            <textarea id="post-text" rows="1" placeholder="اكتب تدوينة أو شارك فيديو..." oninput="autoHeight(this)"></textarea>
+            
+            <div class="gemini-tools">
+                <div class="media-btns">
+                    <label for="img-upload" class="tool-btn">
+                        <i class="fas fa-image"></i>
+                        <input type="file" id="img-upload" accept="image/*" hidden onchange="handlePreview('image')">
+                    </label>
+                    <label for="vid-upload" class="tool-btn">
+                        <i class="fas fa-video"></i>
+                        <input type="file" id="vid-upload" accept="video/*" hidden onchange="handlePreview('video')">
+                    </label>
+                </div>
+
+    <button id="sendBtn" class="send-btn" onclick="submitPost()">
+    <i class="fas fa-paper-plane"></i>
+</button>
+            </div>
+        </div>
+    </div>
+
+<script type="module" src="community.js"></script>
+</body>
+</html>

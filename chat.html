@@ -1,0 +1,135 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الدعم الفني | EBDA</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { background: #05070a; color: white; height: 100vh; display: flex; flex-direction: column; }
+        .chat-container { flex: 1; display: flex; flex-direction: column; max-width: 800px; margin: 20px auto; width: 95%; background: #0f1218; border: 1px solid #1a1a1a; border-radius: 20px; overflow: hidden; }
+        .chat-header { background: #86ff7b; color: #000; padding: 20px; display: flex; justify-content: space-between; align-items: center; font-weight: bold; }
+        #chat-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 15px; background: #05070a; }
+        .message { padding: 12px 18px; border-radius: 15px; max-width: 75%; font-size: 15px; line-height: 1.5; position: relative; }
+        .msg-student { align-self: flex-start; background: #333; color: #fff; border-bottom-right-radius: 2px; }
+        .msg-admin { align-self: flex-end; background: #86ff7b; color: #000; border-bottom-left-radius: 2px; }
+        .chat-input-area { padding: 20px; background: #0f1218; display: flex; gap: 10px; border-top: 1px solid #1a1a1a; }
+        input { flex: 1; background: #1a1a1a; border: 1px solid #333; color: #fff; padding: 12px; border-radius: 10px; outline: none; }
+        .send-btn { background: #86ff7b; border: none; padding: 0 20px; border-radius: 10px; cursor: pointer; color: #000; font-weight: bold; }
+        .back-btn { color: #000; text-decoration: none; font-size: 14px; background: rgba(0,0,0,0.1); padding: 5px 10px; border-radius: 5px; }
+    </style>
+</head>
+<body>
+
+    <div class="chat-container">
+        <div class="chat-header">
+            <div>
+                <i class="fas fa-headset"></i> الدعم الفني المباشر
+            </div>
+                  <a href="index.html" class="back-home-btn">
+    <i class="fas fa-home"></i>
+    <span>الرئيسية</span>
+</a>
+
+        </div>
+
+        <div id="chat-messages">
+            <p style="text-align: center; color: gray;">جاري تحميل المحادثة...</p>
+        </div>
+
+        <div class="chat-input-area">
+            <input type="text" id="chat-input" placeholder="اكتب رسالتك هنا...">
+            <button class="send-btn" id="send-btn">
+                إرسال <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+<script type="module">
+    // 1. الاستيراد الصحيح
+    import { db } from './js.js'; 
+    import { doc, setDoc, onSnapshot, arrayUnion, getDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // 2. جلب بيانات الطالب والتأكد منها
+    const userData = JSON.parse(localStorage.getItem('studentInfo'));
+
+    if (!userData || !userData.uid) {
+        alert("Please login first!");
+        window.location.href = 'login.html';
+    }
+
+    // تحديث الواجهة
+    const chatMessages = document.getElementById('chat-messages');
+    const chatInput = document.getElementById('chat-input');
+    const sendBtn = document.getElementById('send-btn');
+    const chatUserName = document.getElementById('chatUserName');
+
+    if (chatUserName) chatUserName.innerText = userData.name;
+
+    // 3. استقبال الرسائل لايف
+    const chatRef = doc(db, "chats", userData.uid);
+onSnapshot(chatRef, (docSnap) => {
+    if (docSnap.exists()) {
+        const data = docSnap.data();
+        if (data.messages) {
+            chatMessages.innerHTML = data.messages.map(msg => {
+                if (msg.sender === 'admin') {
+                    // شكل رسالة الدعم الفني
+                    return `
+                        <div class="admin-msg">
+                            <div class="admin-header">
+                                <img src="upscalemedia-transformed.png" class="admin-logo"> <span>الدعم الفني لابداع</span>
+                            </div>
+                            <div class="msg-text">${msg.text}</div>
+                            <div class="msg-time" style="font-size:0.7rem; color:gray; margin-top:4px;">${msg.time}</div>
+                        </div>
+                    `;
+                } else {
+                    // شكل رسالة الطالب
+                    return `
+                        <div class="message student-msg">
+                            <div class="msg-text">${msg.text}</div>
+                            <div class="msg-time" style="font-size:0.7rem; opacity:0.7; text-align:right;">${msg.time}</div>
+                        </div>
+                    `;
+                }
+            }).join('');
+            chatMessages.scrollTop = chatMessages.scrollHeight;
+        }
+    }
+});
+    // 4. دالة الإرسال (المحسنة)
+    async function handleSendMessage() {
+        const text = chatInput.value.trim();
+        if (!text) return;
+
+        try {
+            // نستخدم setDoc مع merge عشان نضمن إن الوثيقة تتكريت لو مش موجودة
+            await setDoc(chatRef, {
+                studentName: userData.name,
+                studentEmail: userData.email,
+                lastMessage: text,
+                timestamp: new Date(),
+                messages: arrayUnion({
+                    text: text,
+                    sender: 'student',
+                    time: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+                })
+            }, { merge: true });
+
+            chatInput.value = "";
+        } catch (e) {
+            console.error("Error sending message: ", e);
+            alert("فشل إرسال الرسالة، تأكد من إعدادات الـ Rules في فايربيز");
+        }
+    }
+
+    // 5. ربط الأحداث (Events)
+    sendBtn.addEventListener('click', handleSendMessage);
+    chatInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') handleSendMessage();
+    });
+</script>
+</body>
+</html>

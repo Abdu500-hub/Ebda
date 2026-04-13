@@ -1,0 +1,196 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>مركز الرسائل | EBDA Admin</title>
+    <link rel="stylesheet" href="index.css">
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .chat-admin-container { display: grid; grid-template-columns: 300px 1fr; height: 90vh; margin: 20px; gap: 20px; }
+        .contacts-list { background: var(--card-bg); border-radius: 15px; border: 1px solid var(--border); overflow-y: auto; }
+        .contact-item { padding: 15px; border-bottom: 1px solid var(--border); cursor: pointer; transition: 0.3s; }
+        .contact-item:hover, .contact-item.active { background: rgba(0, 210, 255, 0.1); }
+        .chat-main { background: var(--card-bg); border-radius: 15px; border: 1px solid var(--border); display: flex; flex-direction: column; }
+        #admin-messages { flex: 1; padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+        .admin-input-area { padding: 20px; border-top: 1px solid var(--border); display: flex; gap: 10px; }
+        .admin-input-area input { flex: 1; padding: 12px; border-radius: 10px; background: #1a1a1a; border: none; color: white; }
+        .admin-input-area button { padding: 10px 25px; border-radius: 10px; background: var(--primary); border: none; cursor: pointer; font-weight: bold; }
+    </style>
+</head>
+<body>
+    <div class="chat-admin-container">
+        <div class="contacts-list" id="contacts-list">
+            <h3 style="padding: 15px; color: var(--primary);">المحادثات 👥</h3>
+            </div>
+
+        <div class="chat-main">
+            <div id="active-student-name" style="padding: 15px; border-bottom: 1px solid var(--border); font-weight: bold;">اختر طالب لبدء المحادثة</div>
+            <div id="admin-messages"></div>
+            <div class="admin-input-area">
+    <input type="text" id="admin-reply-input" placeholder="اكتب ردك هنا...">
+    <button onclick="sendAdminReply()" style="background: #22c55e; color: white;">
+        إرسال <i class="fas fa-paper-plane"></i>
+    </button>
+</div>
+        </div>
+    </div>
+<script type="module">
+    // 1. الاستيرادات (Imports) تبقى كما هي
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+    import { getFirestore, collection, onSnapshot, doc, updateDoc, arrayUnion, setDoc } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+    // 2. إعدادات Firebase الخاصة بك
+    const firebaseConfig = {
+        apiKey: "AIzaSyCLMAil66B9IDXJE4w4IR36Gxu0IEKaJ-o",
+        projectId: "eee1-95ee9",
+        // ... بقية البيانات
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    let currentStudentId = null; 
+    let chatUnsubscribe = null;
+
+    // ==========================================
+    // هنا تضع الكود الجديد (استبدل الجزء القديم بهذا)
+    // ==========================================
+    onSnapshot(collection(db, "students"), (snapshot) => {
+        const list = document.getElementById('contacts-list');
+        list.innerHTML = '<h3 style="padding: 15px; color: var(--primary); border-bottom: 1px solid var(--border);">المحادثات 👥</h3>';
+        
+        snapshot.forEach(docSnap => {
+            const student = docSnap.data();
+            const studentId = docSnap.id; 
+
+            const div = document.createElement('div');
+            div.className = `contact-item ${currentStudentId === studentId ? 'active' : ''}`;
+            div.innerHTML = `
+                <div style="display:flex; align-items:center; gap:12px;">
+                    <img src="${student.profileImage || 'profile-placeholder.png'}" style="width:40px; height:40px; border-radius:50%; border:1px solid var(--primary); object-fit:cover;">
+                    <div style="flex:1; text-align:right;">
+                        <div style="font-weight:bold; color:#fff; font-size:0.9rem;">${student.name}</div>
+                        <small style="color:var(--text-gray); font-size:0.75rem;">${student.phone}</small>
+                    </div>
+                </div>
+            `;
+
+            div.onclick = () => {
+                currentStudentId = studentId;
+                document.getElementById('active-student-name').innerText = "محادثة: " + student.name;
+                document.querySelectorAll('.contact-item').forEach(el => el.classList.remove('active'));
+                div.classList.add('active');
+                loadStudentMessages(studentId);
+            };
+            list.appendChild(div);
+        });
+    });
+
+    // دالة تحميل الرسائل (تأكد من وجودها أيضاً)
+    function loadStudentMessages(id) {
+        if (chatUnsubscribe) chatUnsubscribe(); 
+        const msgContainer = document.getElementById('admin-messages');
+        chatUnsubscribe = onSnapshot(doc(db, "chats", id), (docSnap) => {
+            if (docSnap.exists()) {
+                msgContainer.innerHTML = (docSnap.data().messages || []).map(m => `
+                    <div class="message ${m.sender === 'admin' ? 'msg-admin' : 'msg-student'}">
+                        ${m.text}
+                    </div>
+                `).join('');
+                msgContainer.scrollTop = msgContainer.scrollHeight;
+            } else {
+                msgContainer.innerHTML = '<p style="text-align:center; color:var(--text-gray); padding:20px;">ابدأ المحادثة الآن!</p>';
+            }
+        });
+    }
+    // ==========================================
+    // أضف هذا الكود داخل الـ <script type="module"> في صفحة admin-chat.html
+    window.sendAdminReply = async () => {
+    const input = document.getElementById('admin-reply-input');
+    const text = input.value.trim();
+
+    if (!text || !currentStudentId) return;
+
+    try {
+        // إنشاء أو تحديث وثيقة الشات الخاصة بالطالب (بناءً على رقم هاتفه)
+        const chatRef = doc(db, "chats", currentStudentId); 
+        
+        await setDoc(chatRef, {
+            studentPhone: currentStudentId,
+            messages: arrayUnion({
+                text: text,
+                sender: 'admin',
+                time: new Date().toLocaleTimeString('ar-EG')
+            })
+        }, { merge: true }); // Merge تضمن إنشاء المساحة لو مش موجودة
+
+        input.value = "";
+    } catch (e) {
+        console.error("خطأ في الحفظ بفيربيز:", e);
+    }
+};
+// داخل دالة updateDashboard في ملف admin.html
+function updateDashboard(data) {
+    const listBody = document.getElementById('student-list-body');
+    listBody.innerHTML = '';
+
+    data.forEach(s => {
+        const row = `
+            <tr>
+                <td>
+                    <img src="${s.profileImage || 'profile-placeholder.png'}" class="student-img">
+                    <span>${s.name}</span>
+                </td>
+                <td>${s.phone}</td>
+                <td><b style="color:${s.plan === 'Free Tier' ? '#aaa' : '#22c55e'}">${s.plan}</b></td>
+                <td>
+                    <div class="admin-actions">
+                        <button class="chat-btn" onclick="openStudentChat('${s.phone}')" title="مراسلة">
+                            <i class="fas fa-comments"></i>
+                        </button>
+                        
+                        <button class="notif-btn" onclick="sendPrivateNotif('${s.phone}', '${s.name}')" title="إرسال إشعار">
+                            <i class="fas fa-bell"></i>
+                        </button>
+
+                        <a href="https://wa.me/2${s.phone}" target="_blank" class="whatsapp-btn">
+                            <i class="fab fa-whatsapp"></i>
+                        </a>
+                    </div>
+                </td>
+            </tr>
+        `;
+        listBody.innerHTML += row;
+    });
+}
+// 1. الانتقال لصفحة الشات مع اختيار الطالب تلقائياً
+window.openStudentChat = function(phone) {
+    // ممكن تخزن الرقم في sessionStorage عشان صفحة الشات تفتحه فوراً
+    sessionStorage.setItem('targetStudent', phone);
+    window.location.href = 'admin-chat.html';
+};
+
+// 2. إرسال إشعار خاص يظهر في جرس الطالب
+window.sendPrivateNotif = async function(phone, name) {
+    const msg = prompt(`اكتب الإشعار الذي تريد إرساله لـ ${name}:`);
+    if (!msg) return;
+
+    try {
+        // إضافة الإشعار في كولكشن الإشعارات الخاص بهذا الطالب
+        await addDoc(collection(db, "admin_notifications"), {
+            targetPhone: phone, // الإشعار موجه لهذا الطالب فقط
+            message: msg,
+            sender: "Admin",
+            timestamp: serverTimestamp()
+        });
+        alert("تم إرسال الإشعار بنجاح! 🔔");
+    } catch (e) {
+        alert("خطأ في الإرسال");
+    }
+};
+</script>
+
+</body>
+</html>

@@ -1,0 +1,700 @@
+
+/* EBDA Full Dashboard & Header Styles */
+:root {
+    --primary: #86ff7b;
+    --secondary: #9d50bb;
+    --dark-bg: #05070a;
+    --card-bg: #0f1218;
+    --text-white: #ffffff;
+    --text-gray: #b0b0b0;
+    --border: rgba(255, 255, 255, 0.08);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--dark-bg);
+    color: var(--text-white);
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+}
+
+/* ==========================================
+   1. تنسيق الهيدر (Header)
+   ========================================== */
+header {
+    background: rgba(15, 18, 24, 0.9);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    padding: 10px 5%;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.logo {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: var(--primary);
+    text-decoration: none;
+}
+
+/* منطقة المستخدم في الهيدر */
+.user-nav-wrapper {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.nav-avatar {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: 2px solid var(--primary);
+    object-fit: cover;
+}
+
+.user-greeting {
+    font-size: 0.9rem;
+    color: var(--text-white);
+}
+
+.dash-btn {
+    background: var(--primary);
+    color: #000 !important;
+    padding: 6px 15px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 0.85rem;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+.logout-link {
+    background: transparent;
+    color: #ff4b2b;
+    border: 1px solid #ff4b2b;
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 0.8rem;
+    transition: 0.3s;
+}
+
+.logout-link:hover {
+    background: #ff4b2b;
+    color: #fff;
+}
+
+/* ==========================================
+   2. تنسيق لوحة التحكم (Dashboard)
+   ========================================== */
+.dashboard-container {
+    padding: 120px 5% 50px;
+    max-width: 1300px;
+    margin: 0 auto;
+}
+
+.welcome-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.h1 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    background-color:black ;
+  
+    -webkit-text-fill-color: transparent;
+}
+
+/* شبكة الكروت */
+.dashboard-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 25px;
+}
+
+/* تصميم الكارت */
+.stat-card {
+    background: var(--card-bg);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 35px;
+    text-align: center;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-card:hover {
+    border-color: var(--primary);
+    transform: translateY(-8px);
+    box-shadow: 0 10px 30px rgba(0, 210, 255, 0.15);
+}
+
+/* الصورة الشخصية داخل الكارت */
+#user-img-dash {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid var(--primary);
+    object-fit: cover;
+    margin-bottom: 15px;
+}
+
+/* النصوص */
+.stat-card h2 { color: #fff; margin: 10px 0; font-size: 1.6rem; }
+.stat-card p { color: var(--text-gray); margin-bottom: 5px; }
+
+/* شارة الباقة */
+.plan-badge {
+    display: inline-block;
+    padding: 8px 25px;
+    background: linear-gradient(45deg, var(--primary), var(--secondary));
+    color: #fff !important;
+    border-radius: 50px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    margin: 15px 0;
+    box-shadow: 0 4px 15px rgba(0, 210, 255, 0.3);
+}
+
+/* زر الترقية */
+.upgrade-btn {
+    color: var(--primary) !important;
+    text-decoration: none;
+    font-size: 0.9rem;
+    border: 1px solid var(--primary);
+    padding: 8px 20px;
+    border-radius: 10px;
+    margin-top: auto;
+    transition: 0.3s;
+}
+
+.upgrade-btn:hover {
+    background: var(--primary);
+    color: #000 !important;
+}
+
+/* تفاصيل المعلومات (التاريخ) */
+.info-item {
+    width: 100%;
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid var(--border);
+    color: var(--text-gray);
+    font-size: 0.85rem;
+}
+
+/* شاشة التحميل (Loader) */
+#loading-screen {
+    position: fixed;
+    inset: 0;
+    background: var(--dark-bg);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+    transition: 0.5s;
+}
+/* الزر الأخضر في الداشبورد */
+.go-btn:hover {
+    background-color: #16a34a !important;
+    box-shadow: 0 0 15px rgba(34, 197, 94, 0.4);
+    transform: scale(1.02);
+}
+
+/* حالة الزر في صفحة الكورسات بعد الاشتراك */
+.main-btn1:disabled {
+    background-color: #4b5563 !important;
+    color: #9ca3af !important;
+    cursor: not-allowed;
+    border: none;
+}
+
+/* تنسيق حاوية الصورة */
+.img-container {
+    position: relative;
+    width: 110px;
+    height: 110px;
+    margin: 0 auto 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* تنسيق الصورة الشخصية لضمان عدم التمطط */
+#user-img-dash {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    border: 3px solid var(--primary);
+    object-fit: cover; /* تجعل الصورة تملأ الدائرة بشكل احترافي */
+    display: block;
+}
+
+/* تنسيق أيقونة الكاميرا لتظهر فوق الصورة */
+.edit-icon {
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
+    background: var(--primary);
+    color: #000;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10; /* تجعلها فوق الصورة */
+    border: 2px solid var(--dark-bg);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.5);
+}
+
+
+.chat-widget { position: fixed; bottom: 20px; left: 20px; z-index: 1000; }
+.chat-trigger { width: 60px; height: 60px; border-radius: 50%; background: var(--primary); border: none; color: #000; font-size: 24px; cursor: pointer; box-shadow: 0 4px 15px rgba(0,210,255,0.4); }
+.chat-window { width: 300px; height: 400px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 15px; margin-bottom: 15px; display: flex; flex-direction: column; overflow: hidden; }
+.chat-header { background: var(--primary); color: #000; padding: 10px 15px; display: flex; justify-content: space-between; font-weight: bold; }
+.chat-messages { flex: 1; padding: 10px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+.message { padding: 8px 12px; border-radius: 10px; max-width: 80%; font-size: 0.9rem; }
+.msg-student { background: #333; align-self: flex-start; color: white; }
+.msg-admin { background: var(--primary); align-self: flex-end; color: #000; }
+.chat-input-area { padding: 10px; border-top: 1px solid var(--border); display: flex; gap: 5px; }
+.chat-input-area input { flex: 1; background: #1a1a1a; border: none; color: white; padding: 8px; border-radius: 5px; outline: none; }
+
+
+
+
+
+
+
+
+.contact-item {
+    padding: 12px 15px;
+    border-bottom: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-right: 3px solid transparent;
+}
+
+.contact-item:hover {
+    background: rgba(255, 255, 255, 0.03);
+}
+
+.contact-item.active {
+    background: rgba(0, 210, 255, 0.08);
+    border-right-color: var(--primary); /* خط تمييز بجانب الطالب المختار */
+}
+
+.contacts-list {
+    background: var(--card-bg); /* */
+    border-radius: 15px;
+    border: 1px solid var(--border);
+    height: 100%;
+    overflow-y: auto;
+}            
+/* تصميم زر الرجوع للرئيسية */
+.back-home-btn {
+    position: fixed;
+    top: 20px;
+    left: 20px; /* جهة اليسار لأن الصفحة RTL */
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 18px;
+    background: #86ff7b; /* لون المنصة الأخضر */
+    color: #000 !important; /* لون النص أسود */
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 50px;
+    box-shadow: 0 4px 15px rgba(134, 255, 123, 0.3);
+    transition: all 0.3s ease;
+    z-index: 9999; /* ليكون فوق كل العناصر */
+    font-family: sans-serif;
+}
+
+.back-home-btn:hover {
+    transform: translateX(-5px); /* حركة بسيطة عند التمرير */
+    background: #75e66a;
+    box-shadow: 0 6px 20px rgba(134, 255, 123, 0.5);
+}
+
+.back-home-btn i {
+    font-size: 18px;
+}
+/* تنسيق رأس المنشور */
+.post-header { display: flex; align-items: center; gap: 12px; margin-bottom: 15px; position: relative; }
+.author-img { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--accent); object-fit: cover; }
+.author-info h4 { margin: 0; font-size: 1rem; color: var(--accent); }
+.author-info span { font-size: 0.75rem; color: #888; }
+
+/* زر الحذف (الزبالة) */
+.delete-btn { position: absolute; left: 0; top: 0; background: none; border: none; color: #ff4d4d; cursor: pointer; font-size: 1.1rem; }
+
+/* صورة المنشور الكبيرة */
+.post-main-img { width: 100%; border-radius: 12px; margin-top: 10px; max-height: 400px; object-fit: cover; }
+
+/* أزرار التفاعل */
+.post-actions { display: flex; border-top: 1px solid #333; margin-top: 15px; padding-top: 10px; gap: 20px; }
+.post-actions button { background: none; border: none; color: #ccc; cursor: pointer; transition: 0.3s; }
+.post-actions button:hover { color: var(--accent); }
+
+/* قسم التعليقات */
+.comments-section { background: #1a1f26; border-radius: 10px; padding: 10px; margin-top: 10px; }
+.comment-input-area { display: flex; gap: 5px; margin-top: 10px; }
+.comment-input-area input { flex: 1; background: #05070a; border: 1px solid #333; color: white; border-radius: 20px; padding: 5px 15px; }
+
+/* لتناسب الهواتف المحمولة */
+@media (max-width: 600px) {
+    .back-home-btn span {
+        display: none; /* إخفاء النص في الشاشات الصغيرة وترك الأيقونة فقط */
+    }
+    .back-home-btn {
+        padding: 12px;
+        border-radius: 50%;
+    }
+}
+
+
+
+/* حل مشكلة صفحة اللوجن */
+.auth-page-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh; /* يخلي الحاوية بطول الشاشة كلها */
+    background-color: #05070a; /* نفس لون الخلفية بتاعتك */
+    padding-top: 80px; /* عشان يبعد عن الهيدر لو موجود */
+}
+
+.login-card {
+    background: #0f1218;
+    padding: 40px;
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    width: 100%;
+    max-width: 450px; /* عرض الكارت المناسب */
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+    z-index: 10;
+}
+
+/* عشان تضمن إن مفيش حاجة تانية مدارية على الصفحة */
+#loading-screen {
+    display: none !important; /* لو كان اللودر هو اللي ظاهر في الصورة */
+}
+
+
+/* الحاوية اللي شايلاهم كلهم */
+.courses-container {
+    display: flex;
+    flex-direction: column; /* ده اللي بيخليهم تحت بعض */
+    gap: 30px;              /* المسافة بين كل كورس والتاني */
+    align-items: center;    /* توسيط الكروت في نص الصفحة */
+    padding: 20px;
+}
+
+.course-main-card {
+    width: 90%;
+    max-width: 500px;
+    background: #1a1a1a;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+}
+.main-btn1 {
+    background: #22c55e !important; /* لون أخضر واضح */
+    color: white !important;
+    padding: 12px 25px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    text-decoration: none;
+    display: inline-block;
+    transition: transform 0.2s, background 0.2s;
+    box-shadow: 0 4px 12px rgba(34, 197, 94, 0.4);
+}
+
+.main-btn1:hover {
+    background: #16a34a !important;
+    transform: translateY(-2px); /* تأثير حركة خفيف عند الوقوف عليه */
+}
+.student-notif-container {
+    background: linear-gradient(145deg, #1e1f20, #151617);
+    border: 1px solid #3c4043;
+    border-right: 4px solid #86ff7b; /* الخط الأخضر بتاعك */
+    border-radius: 12px;
+    margin-bottom: 25px;
+    overflow: hidden;
+    display: none; /* مش هيظهر غير لما يكون فيه إشعار فعلاً */
+}
+
+.notif-header {
+    background: rgba(134, 255, 123, 0.05);
+    padding: 10px 15px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #3c4043;
+    color: #86ff7b;
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+.notif-content {
+    padding: 15px;
+    color: #e3e3e3;
+    line-height: 1.6;
+}
+
+.notif-item-text {
+    margin-bottom: 10px;
+    padding-bottom: 10px;
+    border-bottom: 1px dotted #333;
+}
+
+.notif-item-text:last-child { border: none; margin: 0; }
+
+.close-notif {
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.student-id-section {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+}
+
+.id-card {
+    width: 380px;
+    background: linear-gradient(135deg, #1e1f20 0%, #0d1117 100%);
+    border: 1px solid rgba(134, 255, 123, 0.2);
+    border-radius: 15px;
+    padding: 15px;
+    position: relative;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+    overflow: hidden;
+}
+
+/* حركة الجرافيك اللي في الخلفية */
+.id-card::before {
+    content: "";
+    position: absolute;
+    top: -50%;
+    right: -50%;
+    width: 200px;
+    height: 200px;
+    background: rgba(134, 255, 123, 0.05);
+    border-radius: 50%;
+}
+
+.id-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #3c4043;
+    padding-bottom: 10px;
+    margin-bottom: 15px;
+}
+
+.card-logo { width: 30px; }
+.card-title { color: #86ff7b; font-size: 0.8rem; font-weight: bold; }
+
+.id-card-body { display: flex; gap: 15px; align-items: center; }
+
+.student-photo {
+    width: 80px;
+    height: 80px;
+    border-radius: 10px;
+    border: 2px solid #86ff7b;
+    overflow: hidden;
+}
+.student-photo img { width: 100%; height: 100%; object-fit: cover; }
+
+.student-info-grid { flex: 1; display: grid; grid-template-columns: 1fr; gap: 5px; }
+
+.info-item label { color: #888; font-size: 0.7rem; display: block; margin-bottom: -2px; }
+.info-item span { color: #fff; font-size: 0.85rem; font-weight: bold; }
+
+.status-active { color: #86ff7b !important; }
+
+.id-card-footer {
+    margin-top: 15px;
+    text-align: center;
+    font-size: 0.6rem;
+    color: #555;
+    letter-spacing: 1px;
+}
+
+
+
+
+@media (max-width: 768px) {
+    /* تصميم خاص لمنيو صفحة الدروس */
+    #lessonsNav.active {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        position: fixed;
+        top: 0;
+        right: 0;
+        width: 100%; /* تاخد الشاشة كلها في الموبايل لتركيز أعلى */
+        height: 100vh;
+        background: rgba(10, 10, 10, 0.95); /* خلفية سوداء شفافة */
+        backdrop-filter: blur(10px); /* تأثير الضباب */
+        z-index: 2000;
+    }
+
+    /* تكبير الروابط عشان اللمس بالصابع يكون أسهل */
+    #lessonsNav a {
+        font-size: 24px;
+        margin: 20px 0;
+        color: #86ff7b;
+    }
+}
+/* تنسيق الهيدر المريح */
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background: #0a0a0a;
+}
+
+/* إخفاء الزحمة في الهيدر في الموبايل */
+@media (max-width: 768px) {
+    /* بنخفي منطقة الترحيب والأزرار من الهيدر الأساسي */
+    .header-content .user-nav-wrapper {
+        display: none !important; 
+    }
+
+    /* المنيو الجانبية بتلم كل حاجة */
+    .side-nav {
+        position: fixed;
+        right: -100%;
+        top: 0;
+        width: 80%;
+        height: 100vh;
+        background: #111;
+        padding: 20px;
+        transition: 0.4s;
+        z-index: 2000;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .side-nav.active {
+        right: 0;
+    }
+
+    /* تخلي بيانات الطالب تظهر تحت بعض في المنيو */
+    .side-nav #auth-area .user-nav-wrapper {
+        display: flex !important;
+        flex-direction: column;
+        align-items: center;
+        gap: 15px;
+    }
+}
+.back-nav-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background: rgba(134, 255, 123, 0.1);
+    border: 1px solid #86ff7b;
+    color: #86ff7b;
+    padding: 5px 12px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-family: inherit;
+    transition: 0.3s;
+}
+
+.back-nav-btn:hover {
+    background: #86ff7b;
+    color: #000;
+}
+
+/* في الموبايلات الصغيرة جداً هنخفي كلمة "رجوع" ونكتفي بالأيقونة */
+@media (max-width: 480px) {
+    .back-nav-btn span {
+        display: none;
+    }
+    .back-nav-btn {
+        padding: 8px;
+    }
+}
+.subscribe-btn:disabled {
+    background-color: #4b5563 !important;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+}
+/* شكل رسالة الدعم الفني (Admin) */
+.admin-msg {
+    align-self: flex-start;
+    display: flex;
+    flex-direction: column;
+    max-width: 80%;
+    margin-bottom: 15px;
+}
+
+.admin-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 5px;
+    font-size: 0.85rem;
+    color: #2ecca4; /* اللون الأخضر */
+    font-weight: bold;
+}
+
+.admin-logo {
+    width: 25px;
+    height: 25px;
+    border-radius: 50%;
+    border: 1px solid #2ecca4;
+    object-fit: cover;
+}
+
+.admin-msg .msg-text {
+    background: #161b22; /* خلفية غامقة شيك */
+    color: #fff;
+    border: 1px solid #2ecca4; /* إطار أخضر */
+    padding: 12px 16px;
+    border-radius: 0 15px 15px 15px;
+    position: relative;
+}
+
+/* شكل رسالة الطالب (أنت) */
+.student-msg {
+    align-self: flex-end;
+    background: #2ecca4;
+    color: #000;
+    padding: 10px 15px;
+    border-radius: 15px 15px 0 15px;
+    max-width: 70%;
+    margin-bottom: 10px;
+}

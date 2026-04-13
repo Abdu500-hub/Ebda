@@ -1,0 +1,113 @@
+/* تنسيق الصفحة بالكامل */
+body, html {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    font-family: 'Poppins', sans-serif;
+    background: #0b0e14; /* نفس لون خلفية موقعك */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+/* الكارت الشفاف اللي شايل البيانات */
+.glass-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 50px;
+    border-radius: 20px;
+    text-align: center;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.8);
+    max-width: 500px;
+    width: 90%;
+}
+
+/* تنسيق اللوجو */
+.hero-logo {
+    width: 150px;
+    margin-bottom: 20px;
+    filter: drop-shadow(0 0 10px #00ff88); /* وهج أخضر خفيف */
+}
+
+.welcome-title {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+}
+
+.highlight {
+    color: #2ecc71; /* اللون الأخضر بتاع البراند بتاعك */
+}
+
+.welcome-subtitle {
+    color: #888;
+    margin-bottom: 40px;
+}
+
+/* تنسيق الزراير */
+.auth-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+}
+
+.btn {
+    padding: 12px 30px;
+    border-radius: 8px;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary {
+    background: #2ecc71;
+    color: #0b0e14;
+}
+
+.btn-primary:hover {
+    background: #27ae60;
+    transform: translateY(-3px);
+}
+
+.btn-secondary {
+    background: transparent;
+    color: #2ecc71;
+    border: 2px solid #2ecc71;
+}
+
+.btn-secondary:hover {
+    background: rgba(46, 204, 113, 0.1);
+}
+
+
+body {
+    margin: 0;
+    padding: 0;
+    height: 100vh;
+    font-family: 'Poppins', sans-serif;
+    background-color: #0b0e14; /* اللون الغامق الأساسي */
+    
+    /* إعدادات اللوجو كخلفية */
+    background-image: url('images/logo.png'); 
+    background-position: center; /* في نص الصفحة */
+    background-repeat: no-repeat; /* ميتكررش */
+    background-size: 40%; /* حجم اللوجو بالنسبة للشاشة، صغره أو كبره من هنا */
+    background-attachment: fixed; /* يفضل ثابت حتى لو عملت Scroll */
+    
+    /* حركة احترافية: إضافة طبقة تغميق فوق اللوجو عشان الزراير تبان */
+    background-blend-mode: overlay;
+    background-color: rgba(11, 14, 20, 0.85); /* درجة الشفافية */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* لو عايز اللوجو "ينور" من ورا الكلام */
+.welcome-screen {
+    z-index: 1; /* يخلي المحتوى فوق الخلفية */
+    text-align: center;
+}
