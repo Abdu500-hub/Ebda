@@ -1,0 +1,160 @@
+ <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>رحلة البيانات | IBDA TEAM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg: #0d1117;
+            --card: #161b22;
+            --green: #2ecc71;
+            --gold: #D4AF37;
+            --text: #c9d1d9;
+            --border: #30363d;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            line-height: 1.8;
+        }
+
+        .hero-section {
+            background: linear-gradient(45deg, #0d1117, #161b22);
+            padding: 60px 20px;
+            text-align: center;
+            border-bottom: 2px solid var(--gold);
+        }
+
+        .hero-section h1 {
+            color: var(--gold);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: -40px auto 40px;
+            background: var(--card);
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid var(--border);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+
+        .info-block { margin-bottom: 40px; }
+        
+        h2 {
+            color: var(--green);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            border-right: 4px solid var(--gold);
+            padding-right: 15px;
+        }
+
+        .highlight-box {
+            background: rgba(46, 204, 113, 0.05);
+            border-right: 4px solid var(--green);
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 0 10px 10px 0;
+        }
+
+        .lesson-img {
+            width: 100%;
+            border-radius: 15px;
+            margin: 25px 0;
+            border: 1px solid var(--border);
+            transition: 0.3s;
+        }
+
+        .lesson-img:hover { border-color: var(--gold); transform: scale(1.01); }
+
+        .tech-list { list-style: none; padding: 0; }
+        .tech-list li {
+            background: #21262d;
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+
+        .tech-list li i { color: var(--gold); margin-left: 10px; }
+
+        .download-footer {
+            text-align: center;
+            margin-top: 50px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-pdf {
+            background: var(--gold);
+            color: #000;
+            padding: 15px 35px;
+            border-radius: 50px;
+            text-decoration: none;
+            font-weight: bold;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: 0.3s;
+        }
+
+        .btn-pdf:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); }
+
+        .back-btn { color: var(--green); text-decoration: none; margin-bottom: 20px; display: block; }
+    </style>
+</head>
+<body>
+
+    <section class="hero-section">
+        <h1>الدرس الأول: رحلة عبر أسلاك الإنترنت</h1>
+        <p>من جهازك إلى آخر نقطة في العالم.. كيف تسافر البيانات؟</p>
+    </section>
+
+    <div class="container">
+        <a href="../resources.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للمكتبة</a>
+
+        <div class="info-block">
+            <h2><i class="fas fa-globe"></i> ما هو الإنترنت الحقيقي؟</h2>
+            <p>الإنترنت ليس "سحابة" في الهواء كما يظن البعض، بل هو **أضخم هيكل هندسي بناه البشر**. هو عبارة عن ملايين الكيلومترات من كابلات الألياف الضوئية (Fiber Optics) التي تمتد في قيعان المحيطات لتربط القارات ببعضها بسرعة الضوء.</p>
+            
+            <img src="Gemini_Generated_Image_8wylc08wylc08wyl.png" alt="شبكة الإنترنت العالمية" class="lesson-img">
+            
+            <div class="highlight-box">
+                <strong>معلومة تقنية:</strong> هل تعلم أن 99% من بيانات العالم تنتقل عبر الكابلات البحرية، وليس عبر الأقمار الصناعية كما يشاع؟ الأقمار الصناعية بطيئة مقارنة بسرعة الألياف الضوئية!
+            </div>
+        </div>
+
+        <div class="info-block">
+            <h2><i class="fas fa-server"></i> معمارية العميل والخادم (Client-Server)</h2>
+            <p>لكي يعمل الإنترنت، نحتاج إلى "طرفين" دائمين:</p>
+            <ul class="tech-list">
+                <li><i class="fas fa-laptop"></i> <strong>العميل (Client):</strong> هو جهازك (متصفح كروم، تطبيق موبايل) الذي يطلب المعلومة.</li>
+                <li><i class="fas fa-database"></i> <strong>الخادم (Server):</strong> هو كمبيوتر بمواصفات جبارة يعمل 24/7 ليقدم لك الملفات.</li>
+            </ul>
+            
+            <img src="Gemini_Generated_Image_w2ajjew2ajjew2aj (1).png" alt="Client Server Architecture" class="lesson-img">
+        </div>
+
+        <div class="info-block">
+            <h2><i class="fas fa-route"></i> كيف يجد جهازك الطريق؟</h2>
+            <p>عندما تكتب `google.com` في متصفحك، تحدث عملية معقدة في أجزاء من الثانية:</p>
+            <ul class="tech-list">
+                <li><strong>الـ IP Address:</strong> هو الرقم الفريد لكل جهاز (مثل رقم الموبايل)، وبدونه لا تعرف البيانات أين تذهب.</li>
+                <li><strong>الـ DNS:</strong> هو "مترجم" الإنترنت، يحول الاسم الذي تحفظه (google.com) إلى رقم يفهمه الكمبيوتر.</li>
+                <li><strong>الـ Routers:</strong> هي "عساكر المرور" التي توجه بياناتك عبر أفضل طريق ممكن لتصل في أسرع وقت.</li>
+            </ul>
+        </div>
+
+    </div>
+
+</body>
+</html>
