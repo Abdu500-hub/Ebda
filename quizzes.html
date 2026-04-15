@@ -4,103 +4,405 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>اختبارات كورس الإنترنت | EBDA</title>
-    <link rel="stylesheet" href="index.css">
+    <title>مركز الاختبارات | IBDA TEAM</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
     <style>
-        body { background-color: #05070a; color: white; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .quiz-page { max-width: 900px; margin: 80px auto; padding: 20px; }
-        .station-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; margin-top: 30px; }
-        
-        .station-card {
-            background: #0a0c10;
-            border: 1px solid rgba(134, 255, 123, 0.1);
-            border-radius: 20px;
-            padding: 25px;
-            position: relative;
-            transition: 0.4s;
+        :root {
+            --main-color: #2ecca4;
+            --bg-dark: #0a0c10;
+            --card-bg: #161b22;
+            --gold: #D4AF37;
+            --border-color: #30363d;
+            --error: #ff4b4b;
+        }
+
+        body {
+            background-color: var(--bg-dark);
+            color: white;
+            font-family: 'Cairo', sans-serif;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        .header-section {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .header-section h1 {
+            color: var(--gold);
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        /* تصنيف الدروس */
+        .quiz-category {
+            margin-bottom: 40px;
+        }
+
+        .category-title {
+            color: var(--main-color);
+            border-right: 4px solid var(--gold);
+            padding-right: 15px;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .quizzes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+        }
+
+        /* كارت الكويز */
+        .quiz-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 15px;
+            padding: 25px 20px;
+            text-align: center;
+            transition: 0.3s ease;
             cursor: pointer;
-            overflow: hidden;
+            position: relative;
         }
-        .station-card:hover {
-            border-color: #86ff7b;
-            transform: translateY(-10px);
-            box-shadow: 0 10px 30px rgba(134, 255, 123, 0.05);
+
+        .quiz-card:hover {
+            border-color: var(--main-color);
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(46, 204, 164, 0.1);
         }
-        .station-number {
-            position: absolute;
-            top: -10px;
-            left: -10px;
-            font-size: 5rem;
-            font-weight: 900;
-            color: rgba(134, 255, 123, 0.03);
-            z-index: 0;
+
+        .quiz-card i.main-icon {
+            font-size: 2.5rem;
+            color: var(--gold);
+            margin-bottom: 15px;
+            display: block;
         }
-        .station-card h3 { color: #86ff7b; margin-bottom: 10px; position: relative; }
-        .station-card p { color: #888; font-size: 0.9rem; line-height: 1.6; }
-        
-        /* نظام النافذة المنبثقة للاختبار */
-        #quiz-modal {
-            display: none;
+
+        .quiz-card h3 {
+            margin: 10px 0;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .trophy-icon {
+            color: var(--gold);
+            font-size: 1.1rem;
+        }
+
+        .status-badge {
+            font-size: 0.85rem;
+            padding: 5px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #8b949e;
+        }
+
+        .locked {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* واجهة الاختبار (Modal) */
+        .quiz-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0,0,0,0.9);
-            z-index: 2000;
+            background: rgba(0,0,0,0.95);
+            display: none;
             justify-content: center;
             align-items: center;
+            z-index: 10000;
         }
-        .modal-content {
-            background: #0f1217;
-            padding: 40px;
-            border-radius: 25px;
-            max-width: 600px;
+
+        .quiz-window {
+            background: var(--card-bg);
             width: 90%;
-            border: 1px solid #86ff7b;
-            text-align: center;
+            max-width: 650px;
+            padding: 35px;
+            border-radius: 20px;
+            border: 2px solid var(--main-color);
+            position: relative;
         }
+
         .option-btn {
             display: block;
             width: 100%;
             padding: 15px;
-            margin: 10px 0;
-            background: #1a1e24;
-            border: 1px solid #333;
+            margin: 12px 0;
+            background: #0d1117;
+            border: 1px solid var(--border-color);
             color: white;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            transition: 0.3s;
+            text-align: right;
+            font-size: 1rem;
+            transition: 0.2s;
         }
-        .option-btn:hover { background: #86ff7b; color: #000; }
+
+        .option-btn:hover {
+            border-color: var(--main-color);
+            background: rgba(46, 204, 164, 0.05);
+        }
+
+        .timer-container {
+            width: 100%;
+            height: 6px;
+            background: #30363d;
+            border-radius: 10px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .timer-bar {
+            height: 100%;
+            background: var(--main-color);
+            width: 100%;
+            transition: width 1s linear;
+        }
+
+        /* مراجعة الإجابات */
+        .review-container {
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 20px 0;
+            padding-left: 10px;
+        }
+
+        .review-item {
+            background: #0d1117;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-right: 4px solid var(--main-color);
+        }
+
+        .correct-ans { color: var(--main-color); font-weight: bold; }
     </style>
 </head>
 <body>
-<header>
-    <div class="quiz-header" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background: #0a0c10; border-bottom: 1px solid #86ff7b;">
-    <div class="user-rank">
-        <i class="fas fa-trophy" style="color: #ffd700; font-size: 1.5rem;"></i>
-        <span id="total-points" style="font-size: 1.2rem; font-weight: bold; margin-right: 10px;">0</span>
-        <span style="color: #888;">نقطة</span>
+
+<div class="container">
+    <div class="header-section">
+        <h1><i class="fas fa-trophy"></i> مركز تحديات إبداع</h1>
+        <p>أجب على الأسئلة لجمع النقاط والحصول على الكؤوس الذهبية</p>
     </div>
-    <div class="course-title">كورس أساسيات الشبكات</div>
+
+    <div class="quiz-category">
+        <h2 class="category-title"><i class="fas fa-network-wired"></i> مسار الشبكات</h2>
+        <div class="quizzes-grid">
+            <div class="quiz-card" onclick="startQuiz('net1')">
+                <i class="fas fa-globe main-icon"></i>
+                <h3>رحلة البيانات</h3>
+                <span class="status-badge">100 نقطة</span>
+            </div>
+            <div class="quiz-card locked">
+                <i class="fas fa-server main-icon"></i>
+                <h3>DNS & Servers</h3>
+                <span class="status-badge">مغلق</span>
+            </div>
+            <div class="quiz-card locked">
+                <i class="fas fa-ethernet main-icon"></i>
+                <h3>LAN Networks</h3>
+                <span class="status-badge">مغلق</span>
+            </div>
+            <div class="quiz-card locked">
+                <i class="fas fa-route main-icon"></i>
+                <h3>WAN Networks</h3>
+                <span class="status-badge">مغلق</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="quiz-category">
+        <h2 class="category-title"><i class="fas fa-shield-alt"></i> مسار الأمن السيبراني</h2>
+        <div class="quizzes-grid">
+            <div class="quiz-card locked">
+                <i class="fas fa-user-shield main-icon"></i>
+                <h3>Intro to Security</h3>
+                <span class="status-badge">مغلق</span>
+            </div>
+            <div class="quiz-card locked">
+                <i class="fas fa-mask main-icon"></i>
+                <h3>Social Engineering</h3>
+                <span class="status-badge">مغلق</span>
+            </div>
+            <div class="quiz-card locked">
+                <i class="fas fa-biohazard main-icon"></i>
+                <h3>Malware</h3>
+                <span class="status-badge">مغلق</span>
+            </div>
+            <div class="quiz-card locked">
+                <i class="fas fa-key main-icon"></i>
+                <h3>Password Safety</h3>
+                <span class="status-badge">مغلق</span>
+            </div>
+        </div>
+    </div>
 </div>
 
-<div class="station-grid">
-    <div class="station-card" onclick="openQuiz(0)"><h3>1. ماهية الإنترنت</h3></div>
-    <div class="station-card" onclick="openQuiz(1)"><h3>2. عناوين الـ IP</h3></div>
-    <div class="station-card" onclick="openQuiz(2)"><h3>3. الـ DNS والخوادم</h3></div>
-    <div class="station-card" onclick="openQuiz(3)"><h3>4. أنواع الشبكات (LAN/WAN)</h3></div>
-    <div class="station-card" onclick="openQuiz(4)"><h3>5. أمن الشبكات</h3></div>
+<div id="quizOverlay" class="quiz-overlay">
+    <div class="quiz-window" id="quizWindow">
+        </div>
 </div>
 
-<div id="result-modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.95); z-index:3000; justify-content:center; align-items:center;">
-    <div class="modal-content" style="text-align:center; border: 2px solid #86ff7b;">
-        <i class="fas fa-award" style="font-size: 5rem; color: #86ff7b;"></i>
-        <h2 style="margin-top:20px;">انتهى الاختبار!</h2>
-        <p id="final-score-text" style="font-size: 1.5rem; margin: 20px 0;"></p>
-        <button onclick="location.reload()" class="option-btn" style="background:#86ff7b; color:#000;">العودة للمحطات</button>
-    </div>
-</div>
-</header>
-    <script src="js.js" type="module"></script>
+<script>
+    // بيانات الأسئلة (الدرس الأول)
+    const questions = {
+        'net1': [
+            { q: "ما هو الوسط الذي ينتقل عبره 99% من بيانات العالم؟", a: ["الأقمار الصناعية", "كابلات الألياف الضوئية", "أبراج الشبكات"], c: 1 },
+            { q: "ما هي وظيفة الـ DNS في الشبكة؟", a: ["توجيه الأسلاك", "تأمين كلمات المرور", "ترجمة أسماء المواقع إلى IP"], c: 2 },
+            { q: "من هو 'الخادم' (Server) في معمارية الإنترنت؟", a: ["الجهاز الذي يطلب المعلومة", "كمبيوتر جبار يقدم الملفات 24/7", "المتصفح"], c: 1 },
+            { q: "ماذا يمثل الـ IP Address للجهاز؟", a: ["سرعة الإنترنت", "عنوان فريد للتعرف على الجهاز", "حجم الذاكرة"], c: 1 },
+            { q: "أي الأوساط أسرع في نقل البيانات؟", a: ["الألياف الضوئية", "الأقمار الصناعية", "الواي فاي"], c: 0 },
+            { q: "من هم 'عساكر المرور' الذين يوجهون البيانات؟", a: ["الشاشات", "الـ Routers", "الكيبورد"], c: 1 },
+            { q: "الإنترنت الحقيقي عبارة عن...", a: ["سحابة في الهواء", "هيكل من كابلات تحت المحيطات", "إشارات راديو"], c: 1 },
+            { q: "عند كتابة google.com، من الذي يحول الاسم لعنوان IP؟", a: ["DNS", "IP", "المعالج"], c: 0 },
+            { q: "ما هو دور 'العميل' (Client)؟", a: ["تخزين المواقع", "طلب المعلومة من الخادم", "ربط القارات"], c: 1 },
+            { q: "لماذا الألياف الضوئية أفضل من الأقمار الصناعية؟", a: ["لأنها أرخص", "لأنها أسرع وبدون تأخير", "لأنها لاسلكية"], c: 1 }
+        ]
+    };
+
+    let currentQ = 0;
+    let score = 0;
+    let timer;
+    let timeLeft = 30;
+    let activeId = '';
+
+    // التحقق عند تحميل الصفحة لتحديث شكل الكروت
+    window.onload = function() {
+        updateCardsStatus();
+    }
+
+    function updateCardsStatus() {
+        Object.keys(questions).forEach(id => {
+            const savedScore = localStorage.getItem(`score_${id}`);
+            if (savedScore !== null) {
+                const card = document.querySelector(`[onclick="startQuiz('${id}')"]`);
+                if (card) {
+                    card.querySelector('h3').innerHTML += ` <i class="fas fa-trophy trophy-icon"></i>`;
+                    card.querySelector('.status-badge').innerText = `تم الحل (${savedScore}/100)`;
+                    card.querySelector('.status-badge').style.color = 'var(--main-color)';
+                }
+            }
+        });
+    }
+
+    function startQuiz(id) {
+        activeId = id;
+        const savedScore = localStorage.getItem(`score_${id}`);
+        
+        if (savedScore !== null) {
+            showResults(id, savedScore);
+        } else {
+            currentQ = 0;
+            score = 0;
+            document.getElementById('quizOverlay').style.display = 'flex';
+            loadQuestion();
+        }
+    }
+
+    function loadQuestion() {
+        const qData = questions[activeId][currentQ];
+        const win = document.getElementById('quizWindow');
+        
+        win.innerHTML = `
+            <div style="display:flex; justify-content:space-between; align-items:center;">
+                <span style="color:var(--gold)">سؤال ${currentQ + 1} من 10</span>
+                <span id="timerText" style="color:var(--error); font-weight:bold;">00:30</span>
+            </div>
+            <div class="timer-container"><div id="timerBar" class="timer-bar"></div></div>
+            <h3 style="margin: 20px 0;">${qData.q}</h3>
+            <div id="options">
+                ${qData.a.map((opt, i) => `<button class="option-btn" onclick="checkAnswer(${i})">${opt}</button>`).join('')}
+            </div>
+        `;
+        startTimer();
+    }
+
+    function startTimer() {
+        clearInterval(timer);
+        timeLeft = 30;
+        const bar = document.getElementById('timerBar');
+        timer = setInterval(() => {
+            timeLeft--;
+            document.getElementById('timerText').innerText = `00:${timeLeft < 10 ? '0'+timeLeft : timeLeft}`;
+            bar.style.width = (timeLeft / 30 * 100) + '%';
+            if (timeLeft <= 0) {
+                nextQuestion();
+            }
+        }, 1000);
+    }
+
+    function checkAnswer(selected) {
+        if (selected === questions[activeId][currentQ].c) {
+            score += 10;
+        }
+        nextQuestion();
+    }
+
+    function nextQuestion() {
+        clearInterval(timer);
+        currentQ++;
+        if (currentQ < 10) {
+            loadQuestion();
+        } else {
+            completeQuiz();
+        }
+    }
+
+    function completeQuiz() {
+        localStorage.setItem(`score_${activeId}`, score);
+        updateCardsStatus();
+        showResults(activeId, score);
+    }
+
+    function showResults(id, finalScore) {
+        document.getElementById('quizOverlay').style.display = 'flex';
+        const win = document.getElementById('quizWindow');
+        
+        let html = `
+            <div style="text-align:center;">
+                <i class="fas fa-trophy" style="font-size:4rem; color:var(--gold); margin-bottom:15px;"></i>
+                <h2 style="color:var(--main-color);">مراجعة الاختبار</h2>
+                <p style="font-size:1.4rem;">لقد حصلت على: ${finalScore} من 100</p>
+                <div class="review-container">
+        `;
+
+        questions[id].forEach((q, i) => {
+            html += `
+                <div class="review-item" style="text-align:right;">
+                    <p><strong>س${i+1}:</strong> ${q.q}</p>
+                    <p class="correct-ans">الإجابة الصحيحة: ${q.a[q.c]}</p>
+                </div>
+            `;
+        });
+
+        html += `
+                </div>
+                <button class="option-btn" style="background:var(--main-color); color:black; font-weight:bold;" onclick="closeQuiz()">إغلاق المراجعة</button>
+            </div>
+        `;
+        win.innerHTML = html;
+    }
+
+    function closeQuiz() {
+        document.getElementById('quizOverlay').style.display = 'none';
+        activeId = '';
+    }
+</script>
+
 </body>
 </html>
