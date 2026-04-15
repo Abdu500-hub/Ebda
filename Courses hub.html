@@ -355,11 +355,16 @@
         <li><a href="cors.html"><i class="fas fa-book"></i> الكورسات</a></li>
         <li><a href="dashboard.html"><i class="fas fa-user"></i> حسابي</a></li>
         <div class="quiz-container" style="text-align: center; margin-bottom: 30px;">
-    <button class="quiz-btn" onclick="startQuiz()">
-        <i class="fas fa-vial"></i>
-        <span>اختبر نفسك الآن (Quiz)</span>
-        <div class="btn-shine"></div>
-    </button>
+    <li>
+    <a href="resources.html">
+        <i class="fas fa-file-download"></i> ملحقات الدرس
+    </a>
+</li>
+    <button class="quiz-btn" onclick="location.href='quizzes.html'">
+    <i class="fas fa-vial"></i>
+    <span>اختبر نفسك الآن (Quiz)</span>
+    <div class="btn-shine"></div>
+</button>
 </div>
 
         <hr style="border: 0.5px solid #30363d; margin: 10px 0;">
@@ -451,43 +456,90 @@
 </div>
 
 <script>
-    function switchTab(tab) {
-        // تغيير حالة الأزرار
-        const btns = document.querySelectorAll('.tab-btn');
-        btns.forEach(b => b.classList.remove('active'));
-        event.target.classList.add('active');
+    // 1. وظيفة فتح وإغلاق المنيو الجانبي (Sidebar)
+    function toggleSidebar() {
+        const sidebar = document.getElementById('sideMenu');
+        const overlay = document.getElementById('overlay');
+        
+        if (!sidebar || !overlay) {
+            console.error("عنصر المنيو أو الطبقة الشفافة غير موجود في الكود!");
+            return;
+        }
 
-        // التبديل بين القوائم
-        if (tab === 'network') {
-            document.getElementById('network-list').style.display = 'grid';
-            document.getElementById('cyber-list').style.display = 'none';
+        sidebar.classList.toggle('active');
+        
+        // إظهار أو إخفاء الطبقة الشفافة خلف المنيو
+        if (sidebar.classList.contains('active')) {
+            overlay.style.display = 'block';
+            // منع الصفحة من التحرك أثناء فتح المنيو
+            document.body.style.overflow = 'hidden'; 
         } else {
-            document.getElementById('network-list').style.display = 'none';
-            document.getElementById('cyber-list').style.display = 'grid';
+            overlay.style.display = 'none';
+            document.body.style.overflow = 'auto';
         }
     }
 
+    // 2. وظيفة التبديل بين قوائم الدروس (Tabs)
+    function switchTab(tab) {
+        // تحديث شكل الأزرار
+        const btns = document.querySelectorAll('.tab-btn');
+        btns.forEach(b => b.classList.remove('active'));
+        
+        // تمييز الزر المختار (بناءً على الحدث)
+        if (event) {
+            event.target.classList.add('active');
+        }
+
+        // إظهار القائمة المناسبة وإخفاء الأخرى
+        const netList = document.getElementById('network-list');
+        const cyberList = document.getElementById('cyber-list');
+
+        if (tab === 'network') {
+            netList.style.display = 'grid';
+            cyberList.style.display = 'none';
+        } else {
+            netList.style.display = 'none';
+            cyberList.style.display = 'grid';
+        }
+    }
+
+    // 3. وظيفة تشغيل الفيديو المتقدمة
     function playVid(vidId) {
         const player = document.getElementById('mainVideoPlayer');
-        // هنا يمكنك وضع كود الـ Iframe الخاص بفايربيز أو يوتيوب
-        player.innerHTML = `<h2 style="color: var(--main-color);">جاري تشغيل الدرس: ${vidId}</h2>`;
         
-        // النزول لمشغل الفيديو تلقائياً
+        // قاعدة بيانات معرفات فيديوهات يوتيوب (ID) لكل درس
+        const videoLinks = {
+            'net1': 'tgn7Ge9Fzv4', // الدرس الأول: أساسيات الإنترنت
+            'net2': 'tgn7Ge9Fzv4', // استبدل بـ ID الدرس التاني لما ترفعه
+            'net3': 'ID_HERE',
+            'net4': 'ID_HERE',
+            'cy1': 'ID_HERE',
+            'cy2': 'ID_HERE',
+            'full_project': 'ID_HERE'
+        };
+
+        // الحصول على الكود من الجدول أو استخدام الـ ID المبعوث مباشرة
+        const youtubeId = videoLinks[vidId] || vidId;
+
+        // تحديث منطقة العرض بكود الـ Iframe الاحترافي
+        player.innerHTML = `
+            <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1" 
+                title="Ebda Team Player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen 
+                style="border-radius: 20px; border: none;">
+            </iframe>`;
+        
+        // التمرير بسلاسة لأعلى الصفحة لمشاهدة الفيديو
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
-    function toggleSidebar() {
-    const sidebar = document.getElementById('sideMenu');
-    const overlay = document.getElementById('overlay');
-    
-    sidebar.classList.toggle('active');
-    
-    if (sidebar.classList.contains('active')) {
-        overlay.style.display = 'block';
-    } else {
-        overlay.style.display = 'none';
-    }
-}
-</script>
 
+    // إضافة مستمع لغلق المنيو عند الضغط على الطبقة الشفافة
+    document.getElementById('overlay').addEventListener('click', toggleSidebar);
+</script>
 </body>
 </html>
