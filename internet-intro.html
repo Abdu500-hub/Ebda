@@ -3,155 +3,237 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>رحلة البيانات | IBDA TEAM</title>
+    <title>تفاصيل الدرس | IBDA TEAM</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;800&family=Poppins:wght@400;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --bg: #0d1117;
-            --card: #161b22;
-            --green: #2ecc71;
-            --gold: #D4AF37;
-            --text: #c9d1d9;
+            --card-bg: #161b22;
+            --main: #2ecca4;
+            --accent: #D4AF37;
             --border: #30363d;
+            --text-main: #f0f6fc;
+            --text-dim: #8b949e;
         }
 
         body {
             background-color: var(--bg);
-            color: var(--text);
-            font-family: 'Segoe UI', sans-serif;
+            color: var(--text-main);
+            font-family: 'Cairo', sans-serif;
             margin: 0;
-            padding: 0;
-            line-height: 1.8;
+            line-height: 1.7;
         }
 
-        .hero-section {
-            background: linear-gradient(45deg, #0d1117, #161b22);
-            padding: 60px 20px;
+        .container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+
+        /* الهيدر العلوي */
+        .lesson-hero {
+            background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+            padding: 80px 20px;
             text-align: center;
-            border-bottom: 2px solid var(--gold);
+            border-bottom: 1px solid var(--border);
+            margin-bottom: 40px;
         }
 
-        .hero-section h1 {
-            color: var(--gold);
+        .lesson-hero h1 {
+            color: var(--main);
             font-size: 2.5rem;
-            margin-bottom: 10px;
+            margin-bottom: 15px;
         }
 
-        .container {
-            max-width: 900px;
-            margin: -40px auto 40px;
-            background: var(--card);
-            padding: 40px;
-            border-radius: 20px;
+        /* شريط التقدم الوهمي (يعطي شكل احترافي) */
+        .reading-progress {
+            width: 200px;
+            height: 4px;
+            background: var(--border);
+            margin: 20px auto;
+            border-radius: 10px;
+            position: relative;
+        }
+        .reading-progress::after {
+            content: '';
+            position: absolute;
+            right: 0; top: 0;
+            width: 40%; height: 100%;
+            background: var(--main);
+            box-shadow: 0 0 10px var(--main);
+        }
+
+        /* كروت السكاشن */
+        .section-card {
+            background: var(--card-bg);
             border: 1px solid var(--border);
-            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            border-radius: 20px;
+            padding: 35px;
+            margin-bottom: 30px;
+            transition: 0.3s;
         }
+        .section-card:hover { border-color: var(--main); }
 
-        .info-block { margin-bottom: 40px; }
-        
-        h2 {
-            color: var(--green);
+        .section-title {
             display: flex;
             align-items: center;
-            gap: 10px;
-            border-right: 4px solid var(--gold);
-            padding-right: 15px;
+            gap: 15px;
+            color: var(--accent);
+            font-size: 1.5rem;
+            margin-bottom: 25px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 15px;
         }
 
-        .highlight-box {
-            background: rgba(46, 204, 113, 0.05);
-            border-right: 4px solid var(--green);
-            padding: 20px;
+        /* تنسيق الجداول (للتفاصيل الكبيرة) */
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
             margin: 20px 0;
-            border-radius: 0 10px 10px 0;
+            background: rgba(0,0,0,0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 15px;
+            text-align: right;
+            border-bottom: 1px solid var(--border);
+        }
+        .comparison-table th { background: var(--main); color: #000; }
+
+        /* كروت المعلومة السريعة */
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .info-box {
+            background: rgba(255, 255, 255, 0.03);
+            padding: 20px;
+            border-radius: 12px;
+            border-right: 3px solid var(--main);
         }
 
         .lesson-img {
             width: 100%;
             border-radius: 15px;
-            margin: 25px 0;
-            border: 1px solid var(--border);
-            transition: 0.3s;
-        }
-
-        .lesson-img:hover { border-color: var(--gold); transform: scale(1.01); }
-
-        .tech-list { list-style: none; padding: 0; }
-        .tech-list li {
-            background: #21262d;
-            margin: 10px 0;
-            padding: 15px;
-            border-radius: 8px;
+            margin: 20px 0;
             border: 1px solid var(--border);
         }
 
-        .tech-list li i { color: var(--gold); margin-left: 10px; }
-
-        .download-footer {
-            text-align: center;
-            margin-top: 50px;
+        /* أزرار التنقل السفلي */
+        .lesson-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60px;
             padding-top: 30px;
             border-top: 1px solid var(--border);
         }
-
-        .btn-pdf {
-            background: var(--gold);
-            color: #000;
-            padding: 15px 35px;
-            border-radius: 50px;
+        .nav-btn {
+            padding: 12px 25px;
+            border-radius: 10px;
             text-decoration: none;
             font-weight: bold;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
             transition: 0.3s;
         }
+        .prev { background: var(--border); color: #fff; }
+        .next { background: var(--main); color: #000; }
 
-        .btn-pdf:hover { background: #fff; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(212, 175, 55, 0.4); }
-
-        .back-btn { color: var(--green); text-decoration: none; margin-bottom: 20px; display: block; }
+        @media (max-width: 768px) {
+            .section-card { padding: 20px; }
+            .lesson-hero h1 { font-size: 1.8rem; }
+        }
     </style>
 </head>
 <body>
 
-    <section class="hero-section">
-        <h1>الدرس الأول: رحلة عبر أسلاك الإنترنت</h1>
-        <p>من جهازك إلى آخر نقطة في العالم.. كيف تسافر البيانات؟</p>
-    </section>
+    <div class="lesson-hero">
+        <div class="container">
+            <h1>الدرس الأول: رحلة عبر أسلاك الإنترنت</h1>
+            <p>دليلك الشامل لفهم أعمق بنية تحتية في تاريخ البشرية</p>
+            <div class="reading-progress"></div>
+        </div>
+    </div>
 
     <div class="container">
-        <a href="../resources.html" class="back-btn"><i class="fas fa-arrow-right"></i> العودة للمكتبة</a>
-
-        <div class="info-block">
-            <h2><i class="fas fa-globe"></i> ما هو الإنترنت الحقيقي؟</h2>
-            <p>الإنترنت ليس "سحابة" في الهواء كما يظن البعض، بل هو **أضخم هيكل هندسي بناه البشر**. هو عبارة عن ملايين الكيلومترات من كابلات الألياف الضوئية (Fiber Optics) التي تمتد في قيعان المحيطات لتربط القارات ببعضها بسرعة الضوء.</p>
-            
-            <img src="Gemini_Generated_Image_8wylc08wylc08wyl.png" alt="شبكة الإنترنت العالمية" class="lesson-img">
-            
-            <div class="highlight-box">
-                <strong>معلومة تقنية:</strong> هل تعلم أن 99% من بيانات العالم تنتقل عبر الكابلات البحرية، وليس عبر الأقمار الصناعية كما يشاع؟ الأقمار الصناعية بطيئة مقارنة بسرعة الألياف الضوئية!
+        
+        <div class="section-card">
+            <div class="section-title">
+                <i class="fas fa-microchip"></i>
+                <span>1. البنية التحتية الصلبة</span>
             </div>
+            <p>الإنترنت ليس "سحابة" في الهواء، بل هو نظام فيزيائي ضخم يعتمد على:</p>
+            <div class="info-grid">
+                <div class="info-box">
+                    <strong>الألياف الضوئية</strong>
+                    <p>كابلات تنقل البيانات بسرعة الضوء عبر المحيطات.</p>
+                </div>
+                <div class="info-box">
+                    <strong>مراكز البيانات</strong>
+                    <p>مباني عملاقة تحتوي على آلاف الخوادم القوية.</p>
+                </div>
+            </div>
+            <img src="Gemini_Generated_Image_8wylc08wylc08wyl.png" alt="Hardware" class="lesson-img">
         </div>
 
-        <div class="info-block">
-            <h2><i class="fas fa-server"></i> معمارية العميل والخادم (Client-Server)</h2>
-            <p>لكي يعمل الإنترنت، نحتاج إلى "طرفين" دائمين:</p>
-            <ul class="tech-list">
-                <li><i class="fas fa-laptop"></i> <strong>العميل (Client):</strong> هو جهازك (متصفح كروم، تطبيق موبايل) الذي يطلب المعلومة.</li>
-                <li><i class="fas fa-database"></i> <strong>الخادم (Server):</strong> هو كمبيوتر بمواصفات جبارة يعمل 24/7 ليقدم لك الملفات.</li>
-            </ul>
-            
-            <img src="Gemini_Generated_Image_w2ajjew2ajjew2aj (1).png" alt="Client Server Architecture" class="lesson-img">
+        <div class="section-card">
+            <div class="section-title">
+                <i class="fas fa-exchange-alt"></i>
+                <span>2. العميل ضد الخادم (Client vs Server)</span>
+            </div>
+            <p>لفهم كيف يعمل أي موقع، يجب معرفة الفرق الجوهري بين الطرفين:</p>
+            <table class="comparison-table">
+                <thead>
+                    <tr>
+                        <th>وجه المقارنة</th>
+                        <th>العميل (Client)</th>
+                        <th>الخادم (Server)</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>الوظيفة</td>
+                        <td>يرسل الطلب (Request)</td>
+                        <td>يرسل الاستجابة (Response)</td>
+                    </tr>
+                    <tr>
+                        <td>الأجهزة</td>
+                        <td>موبايل، لابتوب، تابلت</td>
+                        <td>أجهزة كمبيوتر خارقة</td>
+                    </tr>
+                    <tr>
+                        <td>التوافر</td>
+                        <td>يعمل عند الحاجة فقط</td>
+                        <td>يعمل 24/7 بدون توقف</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
 
-        <div class="info-block">
-            <h2><i class="fas fa-route"></i> كيف يجد جهازك الطريق؟</h2>
-            <p>عندما تكتب `google.com` في متصفحك، تحدث عملية معقدة في أجزاء من الثانية:</p>
-            <ul class="tech-list">
-                <li><strong>الـ IP Address:</strong> هو الرقم الفريد لكل جهاز (مثل رقم الموبايل)، وبدونه لا تعرف البيانات أين تذهب.</li>
-                <li><strong>الـ DNS:</strong> هو "مترجم" الإنترنت، يحول الاسم الذي تحفظه (google.com) إلى رقم يفهمه الكمبيوتر.</li>
-                <li><strong>الـ Routers:</strong> هي "عساكر المرور" التي توجه بياناتك عبر أفضل طريق ممكن لتصل في أسرع وقت.</li>
+        <div class="section-card">
+            <div class="section-title">
+                <i class="fas fa-project-diagram"></i>
+                <span>3. كيف يجد جهازك الطريق؟</span>
+            </div>
+            <p>تخيل أن البيانات رسالة ورقية، إليك كيف تصل لعنوانها المظبوط:</p>
+            <ul style="list-style: none; padding: 0;">
+                <li style="margin-bottom: 15px;">
+                    <i class="fas fa-check-circle" style="color: var(--main);"></i>
+                    <strong>DNS:</strong> يحول الاسم (google.com) إلى رقم (142.250.x.x).
+                </li>
+                <li style="margin-bottom: 15px;">
+                    <i class="fas fa-check-circle" style="color: var(--main);"></i>
+                    <strong>IP Address:</strong> هو العنوان الفريد الذي يحدد مكان جهازك على الشبكة.
+                </li>
+                <li style="margin-bottom: 15px;">
+                    <i class="fas fa-check-circle" style="color: var(--main);"></i>
+                    <strong>Routers:</strong> هي الأجهزة التي تختار أقصر مسار لنقل البيانات.
+                </li>
             </ul>
+            <img src="Gemini_Generated_Image_w2ajjew2ajjew2aj (1).png" alt="Architecture" class="lesson-img">
+        </div>
+
+        <div class="lesson-footer">
+            <a href="Courses hub.html" class="nav-btn prev"><i class="fas fa-chevron-right"></i> قائمة الدروس</a>
+            <a href="quizzes.html" class="nav-btn next">ابدأ الاختبار (Quiz) <i class="fas fa-chevron-left"></i></a>
         </div>
 
     </div>
