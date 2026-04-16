@@ -1,0 +1,248 @@
+ <!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دليل الـ DNS والسيرفرات الشامل | IBDA TEAM</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --primary: #2ecca4; 
+            --primary-dark: #24b08d;
+            --dark-bg: #0b1120; 
+            --card-bg: #1e293b;
+            --text-main: #f1f5f9;
+            --text-gray: #94a3b8;
+            --transition: all 0.3s ease;
+        }
+
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-main);
+            margin: 0; padding: 0;
+            line-height: 1.8;
+            overflow-x: hidden;
+        }
+
+        .container { max-width: 1200px; margin: auto; padding: 0 20px; }
+
+        /* --- الهيدر --- */
+        header {
+            background: linear-gradient(to bottom, #111827, var(--dark-bg));
+            padding: 80px 0; text-align: center;
+            position: relative;
+        }
+        .ibda-logo { font-size: 2.5rem; font-weight: 700; color: var(--primary); letter-spacing: -1px; margin-bottom: 20px; }
+        .badge { background: #2ecca433; color: var(--primary); padding: 7px 20px; border-radius: 30px; font-size: 0.9rem; font-weight: 600; display: inline-block; margin-bottom: 15px; }
+        header h1 { font-size: 3rem; margin: 10px 0; line-height: 1.2; }
+        header p { font-size: 1.1rem; color: var(--text-gray); max-width: 700px; margin: auto; }
+
+        /* --- الأقسام --- */
+        section { padding: 60px 0; }
+        .section-title { text-align: center; margin-bottom: 50px; }
+        .section-title h2 { font-size: 2.5rem; margin-bottom: 10px; }
+
+        /* --- بطاقات المعلومات --- */
+        .grid-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .card {
+            background: var(--card-bg);
+            padding: 30px;
+            border-radius: 25px;
+            border: 1px solid #334155;
+            transition: var(--transition);
+        }
+        .card:hover { border-color: var(--primary); transform: translateY(-10px); }
+        .card-icon { font-size: 2rem; color: var(--primary); margin-bottom: 20px; }
+        
+        /* --- تنسيق الصور --- */
+        .img-box {
+            width: 100%;
+            height: auto;
+            border-radius: 15px;
+            margin-bottom: 20px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+        .img-box img {
+            width: 100%;
+            display: block;
+            transition: var(--transition);
+        }
+        .card:hover .img-box img { transform: scale(1.05); }
+
+        /* --- قسم الرحلة --- */
+        .journey-section {
+            background: #111827;
+            border-radius: 30px; padding: 40px;
+            margin: 40px 0;
+        }
+        .journey-img {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        .step-list { list-style: none; padding: 0; }
+        .step-item { display: flex; align-items: center; margin-bottom: 25px; }
+        .step-num {
+            background: var(--primary); color: var(--dark-bg);
+            min-width: 40px; height: 40px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 700; margin-left: 15px;
+        }
+
+        /* --- الفوتر --- */
+        footer {
+            background: #111827;
+            padding: 40px 0; text-align: center;
+            border-top: 1px solid #334155;
+        }
+
+        @media (max-width: 768px) {
+            header h1 { font-size: 2.2rem; }
+            .journey-section { padding: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="container">
+        <div class="ibda-logo">IBDA<span style="color:white"> TEAM</span></div>
+        <span class="badge">الدرس الثاني: كيف يعمل الإنترنت؟</span>
+        <h1>دليل الـ DNS والسيرفرات الشامل</h1>
+        <p>رحلة البيانات من مجرد اسم تكتبه إلى صفحة تنبض بالحياة أمامك بشرح مبسط من فريق إبداع.</p>
+    </div>
+</header>
+
+<div class="container">
+
+    <section>
+        <div class="section-title">
+            <h2>عالم السيرفرات (Servers)</h2>
+        </div>
+
+        <div class="grid-cards">
+            <div class="card">
+                <div class="img-box">
+                    <img src="1.png" alt="Servers Center">
+                </div>
+                <i class="fas fa-server card-icon"></i>
+                <h3>ما هو السيرفر؟</h3>
+                <p>السيرفر هو كمبيوتر "خارق" يشتغل 24 ساعة بدون توقف. وظيفته تخزين ملفات موقعك ويرسلها لأي حد يطلبها في أي وقت.</p>
+            </div>
+
+            <div class="card">
+                <div class="img-box">
+                    <img src="11.png" alt="DNS Directory">
+                </div>
+                <i class="fas fa-atlas card-icon"></i>
+                <h3>ما هو الـ DNS؟</h3>
+                <p>هو "دفتر عناوين" الإنترنت. يقوم بترجمة الأسماء (مثل ibda.com) إلى أرقام IP يفهمها الكمبيوتر ليتصل بالسيرفر الصحيح.</p>
+            </div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-title">
+            <h2>رحلة الطلب: كيف يفتح الموقع؟</h2>
+        </div>
+
+        <div class="journey-section">
+            <img src="22.png" alt="Data Journey" class="journey-img">
+            
+            <div class="step-list">
+                <div class="step-item">
+                    <div class="step-num">1</div>
+                    <p>تكتب اسم الموقع في المتصفح.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">2</div>
+                    <p>المتصفح يسأل الـ <b>DNS</b> عن رقم الـ IP الخاص بالموقع.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">3</div>
+                    <p>الـ DNS يعطي المتصفح الرقم، فيتصل المتصفح بـ <b>السيرفر</b> فوراً.</p>
+                </div>
+                <div class="step-item">
+                    <div class="step-num">4</div>
+                    <p>السيرفر يرسل ملفات الـ HTML والـ CSS وتظهر الصفحة أمامك.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section style="background: var(--card-bg); border-radius: 25px; padding: 40px; margin-bottom: 60px; border: 1px solid #334155;">
+        <h3 style="color: var(--primary); text-align: center;">حقائق تقنية سريعة</h3>
+        <ul style="list-style: none; padding: 0;">
+            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color: var(--primary); margin-left: 10px;"></i> الـ <b>IP Address</b> هو مثل رقم الهاتف لكل جهاز على الإنترنت.</li>
+            <li style="margin-bottom: 15px;"><i class="fas fa-check-circle" style="color: var(--primary); margin-left: 10px;"></i> بدون الـ <b>DNS</b>، ستحتاج لحفظ أرقام معقدة لفتح أي موقع!</li>
+            <li><i class="fas fa-check-circle" style="color: var(--primary); margin-left: 10px;"></i> مطور الـ <b>Full Stack</b> يجب أن يفهم هذه العمليات ليدير المواقع باحترافية.</li>
+        </ul>
+    </section>
+<section id="quiz" style="background: linear-gradient(145deg, #1e293b, #0f172a); border-radius: 30px; padding: 50px; margin: 60px 0; border: 1px solid var(--primary);">
+        <h2 style="text-align: center; color: var(--primary); margin-bottom: 40px;">
+            <i class="fas fa-question-circle"></i> اختبر معلوماتك مع IBDA
+        </h2>
+
+        <div class="quiz-container" style="max-width: 800px; margin: auto;">
+            
+            <div class="quiz-item" style="margin-bottom: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;">
+                <h4 style="color: white; margin-bottom: 15px;">1. ما هو دور الـ DNS في عملية تصفح الإنترنت؟</h4>
+                <div style="color: var(--text-gray);">
+                    <label style="display: block; margin-bottom: 10px; cursor: pointer;">
+                        <input type="radio" name="q1"> تخزين صور وفيديوهات الموقع.
+                    </label>
+                    <label style="display: block; margin-bottom: 10px; cursor: pointer;">
+                        <input type="radio" name="q1"> ترجمة اسم الموقع (URL) إلى رقم IP.
+                    </label>
+                </div>
+            </div>
+
+            <div class="quiz-item" style="margin-bottom: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;">
+                <h4 style="color: white; margin-bottom: 15px;">2. أي مما يلي يُعتبر بمثابة "كمبيوتر خارق" يعمل 24 ساعة لتخزين الملفات؟</h4>
+                <div style="color: var(--text-gray);">
+                    <label style="display: block; margin-bottom: 10px; cursor: pointer;">
+                        <input type="radio" name="q2"> السيرفر (Server).
+                    </label>
+                    <label style="display: block; margin-bottom: 10px; cursor: pointer;">
+                        <input type="radio" name="q2"> المتصفح (Browser).
+                    </label>
+                </div>
+            </div>
+
+            <div class="quiz-item" style="margin-bottom: 30px; background: rgba(255,255,255,0.05); padding: 20px; border-radius: 15px;">
+                <h4 style="color: white; margin-bottom: 15px;">3. ماذا يحدث إذا تعطل السيرفر الخاص بموقع معين؟</h4>
+                <div style="color: var(--text-gray);">
+                    <label style="display: block; margin-bottom: 10px; cursor: pointer;">
+                        <input type="radio" name="q3"> يفتح الموقع بشكل أبطأ قليلاً.
+                    </label>
+                    <label style="display: block; margin-bottom: 10px; cursor: pointer;">
+                        <input type="radio" name="q3"> يتوقف الموقع تماماً عن العمل ولا يظهر للمستخدمين.
+                    </label>
+                </div>
+            </div>
+
+            <button onclick="alert('عاش يا بطل! راجع إجاباتك مع الشرح فوق عشان تتأكد إنك بقيت خبير DNS')" 
+                    style="background: var(--primary); color: var(--dark-bg); border: none; padding: 15px 30px; border-radius: 10px; font-weight: bold; cursor: pointer; width: 100%; font-family: 'Cairo';">
+                تحقق من إجاباتك
+            </button>
+        </div>
+    </section>
+    <footer>
+        <div class="ibda-logo">IBDA<span style="color:white"> TEAM</span></div>
+        <p>تم تطوير الشرح والصفحة بواسطة فريق إبداع &copy; 2026</p>
+    </footer>
+
+</div>
+
+</body>
+</html>
