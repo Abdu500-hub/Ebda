@@ -1,0 +1,175 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>مركز ملحقات إبداع | IBDA TEAM</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        :root {
+            --bg-color: #0d1117;
+            --card-bg: #161b22;
+            --primary-color: #2ecc71;
+            --text-color: #ffffff;
+            --border-color: #30363d;
+            --accent-color: #D4AF37;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 1200px; margin: 0 auto; }
+        
+        h1 {
+            text-align: center;
+            color: var(--primary-color);
+            margin-bottom: 40px;
+            text-shadow: 0 0 10px rgba(46, 204, 113, 0.3);
+        }
+
+        .tabs-container {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 40px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 12px 25px;
+            border: 2px solid var(--primary-color);
+            background: transparent;
+            color: white;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-weight: bold;
+        }
+
+        .tab-btn.active { background: var(--primary-color); color: #000; }
+
+        .category-section { display: none; animation: fadeIn 0.5s ease-in-out; }
+        .category-section.active { display: block; }
+
+        .resource-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .resource-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            padding: 20px;
+            border-radius: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .resource-card:hover {
+            border-color: var(--accent-color);
+            transform: translateY(-5px);
+            box-shadow: 0 5px 20px rgba(212, 175, 55, 0.15);
+        }
+
+        .card-info h3 { margin: 0 0 5px 0; font-size: 17px; color: var(--text-color); }
+        .card-info p { margin: 0; font-size: 13px; color: #8b949e; }
+
+        .lesson-number {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--primary-color);
+            padding: 5px 10px;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .back-nav { margin-bottom: 20px; }
+        .back-nav a { color: var(--primary-color); text-decoration: none; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="back-nav">
+            <a href="index.html"><i class="fas fa-arrow-right"></i> العودة للرئيسية</a>
+        </nav>
+
+        <h1><i class="fas fa-book-open"></i> المكتبة التعليمية التفاعلية</h1>
+
+        <div class="tabs-container">
+            <button class="tab-btn active" onclick="showCategory('network', this)">الشبكات (Network)</button>
+            <button class="tab-btn" onclick="showCategory('cyber', this)">الأمن السيبراني</button>
+        </div>
+
+        <div id="network-section" class="category-section active">
+            <div class="resource-grid">
+<div class="resource-card" onclick="goTo('internet-intro')">
+    <div class="card-info">
+        <h3>What is Internet</h3>
+        <p>مقدمة عن الشبكة العالمية</p>
+    </div>
+    <span class="lesson-number">01</span>
+</div>
+                <div class="resource-card" onclick="goTo('dns-servers')">
+                    <div class="card-info"><h3>DNS & Servers</h3><p>كيف تعمل الخوادم والأسماء؟</p></div>
+                    <span class="lesson-number">02</span>
+                </div>
+                <div class="resource-card" onclick="goTo('lan-networks')">
+                    <div class="card-info"><h3>LAN Networks</h3><p>أساسيات الشبكات المحلية</p></div>
+                    <span class="lesson-number">03</span>
+                </div>
+                <div class="resource-card" onclick="goTo('wan-networks')">
+                    <div class="card-info"><h3>WAN Networks</h3><p>الشبكات الواسعة والربط البعيد</p></div>
+                    <span class="lesson-number">04</span>
+                </div>
+            </div>
+        </div>
+
+        <div id="cyber-section" class="category-section">
+            <div class="resource-grid">
+                <div class="resource-card" onclick="goTo('intro-security')">
+                    <div class="card-info"><h3>Intro to Security</h3><p>أساسيات الحماية الرقمية</p></div>
+                    <span class="lesson-number">01</span>
+                </div>
+                <div class="resource-card" onclick="goTo('social-engineering')">
+                    <div class="card-info"><h3>Social Engineering</h3><p>مخاطر الهندسة الاجتماعية</p></div>
+                    <span class="lesson-number">02</span>
+                </div>
+                <div class="resource-card" onclick="goTo('malware')">
+                    <div class="card-info"><h3>Malware & Viruses</h3><p>أنواع الفيروسات والوقاية منها</p></div>
+                    <span class="lesson-number">03</span>
+                </div>
+                <div class="resource-card" onclick="goTo('password-safety')">
+                    <div class="card-info"><h3>Password Safety</h3><p>تأمين الحسابات الشخصية</p></div>
+                    <span class="lesson-number">04</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    function showCategory(cat, btn) {
+        document.querySelectorAll('.category-section').forEach(s => s.classList.remove('active'));
+        document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(cat + '-section').classList.add('active');
+        btn.classList.add('active');
+    }
+
+    // التعديل هنا: شيلنا كلمة "lessons/" لأن الملفات مع بعض في نفس الفولدر
+    function goTo(page) {
+        window.location.href = page + ".html";
+    }
+</script>
+</body>
+</html>
