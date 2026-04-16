@@ -7,6 +7,11 @@
     <title>مركز الاختبارات | IBDA TEAM</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;700&display=swap" rel="stylesheet">
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
     <style>
         :root {
             --main-color: #2ecca4;
@@ -43,7 +48,6 @@
             margin-bottom: 10px;
         }
 
-        /* تصنيف الدروس */
         .quiz-category {
             margin-bottom: 40px;
         }
@@ -64,7 +68,6 @@
             gap: 20px;
         }
 
-        /* كارت الكويز */
         .quiz-card {
             background: var(--card-bg);
             border: 1px solid var(--border-color);
@@ -116,7 +119,6 @@
             cursor: not-allowed;
         }
 
-        /* واجهة الاختبار (Modal) */
         .quiz-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -173,7 +175,6 @@
             transition: width 1s linear;
         }
 
-        /* مراجعة الإجابات */
         .review-container {
             max-height: 400px;
             overflow-y: auto;
@@ -254,12 +255,26 @@
 </div>
 
 <div id="quizOverlay" class="quiz-overlay">
-    <div class="quiz-window" id="quizWindow">
-        </div>
+    <div class="quiz-window" id="quizWindow"></div>
 </div>
 
 <script>
-    // بيانات الأسئلة (الدرس الأول)
+    // --- 1. إعدادات Firebase (بياناتك من الصورة التانية) ---
+    const firebaseConfig = {
+        apiKey: "AIzaSy...", // كمل البيانات من إعدادات مشروعك
+        authDomain: "eee1-...",
+        projectId: "eee1-...",
+        storageBucket: "eee1-...",
+        messagingSenderId: "...",
+        appId: "..."
+    };
+    
+    if (!firebase.apps.length) {
+        firebase.initializeApp(firebaseConfig);
+    }
+    const db = firebase.firestore();
+
+    // --- 2. بيانات الأسئلة ---
     const questions = {
         'net1': [
             { q: "ما هو الوسط الذي ينتقل عبره 99% من بيانات العالم؟", a: ["الأقمار الصناعية", "كابلات الألياف الضوئية", "أبراج الشبكات"], c: 1 },
@@ -280,8 +295,8 @@
     let timer;
     let timeLeft = 30;
     let activeId = '';
+    let userAnswers = []; // تخزين إجابات الطالب
 
-    // التحقق عند تحميل الصفحة لتحديث شكل الكروت
     window.onload = function() {
         updateCardsStatus();
     }
@@ -291,7 +306,7 @@
             const savedScore = localStorage.getItem(`score_${id}`);
             if (savedScore !== null) {
                 const card = document.querySelector(`[onclick="startQuiz('${id}')"]`);
-                if (card) {
+                if (card && !card.querySelector('.trophy-icon')) {
                     card.querySelector('h3').innerHTML += ` <i class="fas fa-trophy trophy-icon"></i>`;
                     card.querySelector('.status-badge').innerText = `تم الحل (${savedScore}/100)`;
                     card.querySelector('.status-badge').style.color = 'var(--main-color)';
@@ -302,13 +317,15 @@
 
     function startQuiz(id) {
         activeId = id;
-        const savedScore = localStorage.getItem(`score_${id}`);
+        const savedResults = localStorage.getItem(`results_${id}`);
         
-        if (savedScore !== null) {
-            showResults(id, savedScore);
+        if (savedResults !== null) {
+            // عرض المراجعة لو الامتحان محلول قبل كدة
+            showReview(id, JSON.parse(savedResults));
         } else {
             currentQ = 0;
             score = 0;
+            userAnswers = [];
             document.getElementById('quizOverlay').style.display = 'flex';
             loadQuestion();
         }
@@ -317,7 +334,6 @@
     function loadQuestion() {
         const qData = questions[activeId][currentQ];
         const win = document.getElementById('quizWindow');
-        
         win.innerHTML = `
             <div style="display:flex; justify-content:space-between; align-items:center;">
                 <span style="color:var(--gold)">سؤال ${currentQ + 1} من 10</span>
@@ -341,68 +357,75 @@
             document.getElementById('timerText').innerText = `00:${timeLeft < 10 ? '0'+timeLeft : timeLeft}`;
             bar.style.width = (timeLeft / 30 * 100) + '%';
             if (timeLeft <= 0) {
+                userAnswers.push(null);
                 nextQuestion();
             }
         }, 1000);
     }
 
     function checkAnswer(selected) {
-        if (selected === questions[activeId][currentQ].c) {
-            score += 10;
-        }
+        userAnswers.push(selected);
+        if (selected === questions[activeId][currentQ].c) score += 10;
         nextQuestion();
     }
 
     function nextQuestion() {
         clearInterval(timer);
         currentQ++;
-        if (currentQ < 10) {
-            loadQuestion();
-        } else {
-            completeQuiz();
-        }
+        if (currentQ < 10) loadQuestion();
+        else completeQuiz();
     }
 
     function completeQuiz() {
         localStorage.setItem(`score_${activeId}`, score);
+        localStorage.setItem(`results_${activeId}`, JSON.stringify(userAnswers));
+        
+        // إرسال للفيربيز (هيظهر في Firestore عندك)
+        db.collection("quiz_results").add({
+            student: localStorage.getItem("userName") || "طالب مجهول",
+            quiz: activeId,
+            score: score,
+            timestamp: firebase.firestore.FieldValue.serverTimestamp()
+        });
+
         updateCardsStatus();
-        showResults(activeId, score);
+        showReview(activeId, userAnswers);
     }
 
-    function showResults(id, finalScore) {
+    function showReview(id, answers) {
         document.getElementById('quizOverlay').style.display = 'flex';
         const win = document.getElementById('quizWindow');
+        const savedScore = localStorage.getItem(`score_${id}`);
         
         let html = `
             <div style="text-align:center;">
-                <i class="fas fa-trophy" style="font-size:4rem; color:var(--gold); margin-bottom:15px;"></i>
-                <h2 style="color:var(--main-color);">مراجعة الاختبار</h2>
-                <p style="font-size:1.4rem;">لقد حصلت على: ${finalScore} من 100</p>
+                <h2 style="color:var(--main-color);">مراجعة التحدي</h2>
+                <p>درجتك: <span style="color:var(--gold); font-weight:bold;">${savedScore} من 100</span></p>
                 <div class="review-container">
         `;
 
         questions[id].forEach((q, i) => {
+            const studentAns = answers[i];
+            const isCorrect = studentAns === q.c;
+            
             html += `
-                <div class="review-item" style="text-align:right;">
-                    <p><strong>س${i+1}:</strong> ${q.q}</p>
-                    <p class="correct-ans">الإجابة الصحيحة: ${q.a[q.c]}</p>
+                <div class="review-item" style="text-align:right; border-right: 4px solid ${isCorrect ? 'var(--main-color)' : '#ff4b4b'}; padding:10px; background:rgba(255,255,255,0.03); margin-bottom:10px;">
+                    <p style="margin:0;"><strong>س${i+1}:</strong> ${q.q}</p>
+                    <p style="margin:5px 0 0 0; color:${isCorrect ? 'var(--main-color)' : '#ff4b4b'};">
+                        ${isCorrect ? '✅ إجابة صحيحة' : `❌ إجابتك: ${studentAns !== null ? q.a[studentAns] : 'لم تجب'}`}
+                    </p>
+                    ${!isCorrect ? `<p style="margin:2px 0 0 0; color:var(--main-color);">✔️ الصح: ${q.a[q.c]}</p>` : ''}
                 </div>
             `;
         });
 
-        html += `
-                </div>
-                <button class="option-btn" style="background:var(--main-color); color:black; font-weight:bold;" onclick="closeQuiz()">إغلاق المراجعة</button>
-            </div>
-        `;
+        html += `</div><button class="option-btn" style="background:var(--main-color); color:black; font-weight:bold;" onclick="closeQuiz()">إغلاق</button></div>`;
         win.innerHTML = html;
     }
 
     function closeQuiz() {
         document.getElementById('quizOverlay').style.display = 'none';
-        activeId = '';
     }
 </script>
-
 </body>
 </html>
