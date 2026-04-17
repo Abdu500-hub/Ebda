@@ -126,6 +126,7 @@
             color: #000;
         }
 
+        /* حاوية الفيديو المطورة لحل مشكلة السواد */
         .video-player-placeholder {
             width: 100%;
             aspect-ratio: 16/9;
@@ -136,7 +137,8 @@
             align-items: center;
             justify-content: center;
             border: 1px solid var(--border-color);
-            overflow: hidden;
+            overflow: hidden; /* هامة جداً لقص السواد الزائد */
+            position: relative;
         }
 
         /* تنسيق الهيدر */
@@ -319,16 +321,6 @@
         .quiz-btn:hover i {
             transform: rotate(20deg);
         }
-        /* الحركة دي بتعمل زوم داخلي للفيديو جوه الصفحة بتاعتك */
-iframe {
-    transform: scale(1.3); /* بيكبر الفيديو جوه البرواز بتاعه */
-    transform-origin: center;
-    object-fit: cover; /* بيخلي الفيديو يملأ المساحة */
-}
-
-.video-player-placeholder {
-    overflow: hidden; /* عشان الزيادة اللي كبرناها متطلعش بره المربع */
-}
     </style>
 </head>
 <body class="course-page">
@@ -462,9 +454,7 @@ iframe {
     function toggleSidebar() {
         const sidebar = document.getElementById('sideMenu');
         const overlay = document.getElementById('overlay');
-        
         sidebar.classList.toggle('active');
-        
         if (sidebar.classList.contains('active')) {
             overlay.style.display = 'block';
             document.body.style.overflow = 'hidden'; 
@@ -477,14 +467,9 @@ iframe {
     function switchTab(tab) {
         const btns = document.querySelectorAll('.tab-btn');
         btns.forEach(b => b.classList.remove('active'));
-        
-        if (event) {
-            event.target.classList.add('active');
-        }
-
+        if (event) { event.target.classList.add('active'); }
         const netList = document.getElementById('network-list');
         const cyberList = document.getElementById('cyber-list');
-
         if (tab === 'network') {
             netList.style.display = 'grid';
             cyberList.style.display = 'none';
@@ -496,10 +481,9 @@ iframe {
 
     function playVid(vidId) {
         const player = document.getElementById('mainVideoPlayer');
-        
         const videoLinks = {
             'net1': 'tgn7Ge9Fzv4', 
-            'net2': '9VCi3KXU128', // الفيديو الذي طلبته (DNS & Servers)
+            'net2': '9VCi3KXU128', // الدرس الثاني المطلوب
             'net3': 'ID_HERE',
             'net4': 'ID_HERE',
             'cy1': 'ID_HERE',
@@ -508,11 +492,12 @@ iframe {
         };
 
         const youtubeId = videoLinks[vidId] || vidId;
-        
-        // أضفت البارامتر start=39 كما هو موجود في طلبك لتشغيل الفيديو من الثانية 39
         let finalUrl = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
+        
+        // تطبيق وقت البدء للدرس الثاني
         if(vidId === 'net2') finalUrl += `&start=39`;
-// تحديث منطقة العرض بكود يحل مشكلة المساحات السوداء
+
+        // الكود المطور لعرض الفيديو وحل مشكلة الأبعاد
         player.innerHTML = `
             <div style="width: 100%; height: 100%; overflow: hidden; position: relative; border-radius: 20px;">
                 <iframe 
@@ -526,13 +511,18 @@ iframe {
                         top: 50%;
                         left: 50%;
                         width: 100%;
-                        height: 135%; /* زودنا الطول عشان يغطي السواد */
-                        transform: translate(-50%, -50%) scale(1.1); /* عملنا زوم خفيف وسنترنا الفيديو */
+                        height: 132%; /* تكبير رأسي لإخفاء السواد */
+                        transform: translate(-50%, -50%) scale(1.1); /* زوم متوازن وسنترة */
                         border: none;
                     ">
                 </iframe>
             </div>`;
-
+        
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+    
+    // إغلاق المنيو عند الضغط على الأوفرلاي
+    document.getElementById('overlay').addEventListener('click', toggleSidebar);
 </script>
 </body>
 </html>
