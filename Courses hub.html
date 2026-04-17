@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -126,7 +125,6 @@
             color: #000;
         }
 
-        /* حاوية الفيديو المطورة لحل مشكلة السواد */
         .video-player-placeholder {
             width: 100%;
             aspect-ratio: 16/9;
@@ -137,8 +135,7 @@
             align-items: center;
             justify-content: center;
             border: 1px solid var(--border-color);
-            overflow: hidden; /* هامة جداً لقص السواد الزائد */
-            position: relative;
+            overflow: hidden;
         }
 
         /* تنسيق الهيدر */
@@ -286,7 +283,7 @@
             gap: 12px;
             box-shadow: 0 0 10px rgba(46, 204, 164, 0.1);
             width: 100%;
-            margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .btn-shine {
@@ -360,7 +357,7 @@
             <div class="btn-shine"></div>
         </button>
 
-        <hr style="border: 0.5px solid #30363d; margin: 20px 0;">
+        <hr style="border: 0.5px solid #30363d; margin: 10px 0;">
         <li><a href="#" style="color: #ff4b4b;"><i class="fas fa-sign-out-alt"></i> تسجيل الخروج</a></li>
     </ul>
 </div>
@@ -483,7 +480,7 @@
         const player = document.getElementById('mainVideoPlayer');
         const videoLinks = {
             'net1': 'tgn7Ge9Fzv4', 
-            'net2': '9VCi3KXU128', // الدرس الثاني المطلوب
+            'net2': '-yS0YggXm84', // تم التحديث بكود الدرس الثاني الجديد
             'net3': 'ID_HERE',
             'net4': 'ID_HERE',
             'cy1': 'ID_HERE',
@@ -492,37 +489,24 @@
         };
 
         const youtubeId = videoLinks[vidId] || vidId;
-        let finalUrl = `https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1`;
         
-        // تطبيق وقت البدء للدرس الثاني
-        if(vidId === 'net2') finalUrl += `&start=39`;
-
-        // الكود المطور لعرض الفيديو وحل مشكلة الأبعاد
         player.innerHTML = `
-            <div style="width: 100%; height: 100%; overflow: hidden; position: relative; border-radius: 20px;">
-                <iframe 
-                    src="${finalUrl}" 
-                    title="Ebda Team Player" 
-                    frameborder="0" 
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
-                    allowfullscreen 
-                    style="
-                        position: absolute;
-                        top: 50%;
-                        left: 50%;
-                        width: 100%;
-                        height: 132%; /* تكبير رأسي لإخفاء السواد */
-                        transform: translate(-50%, -50%) scale(1.1); /* زوم متوازن وسنترة */
-                        border: none;
-                    ">
-                </iframe>
-            </div>`;
+            <iframe 
+                width="100%" 
+                height="100%" 
+                src="https://www.youtube.com/embed/${youtubeId}?autoplay=1&rel=0&modestbranding=1" 
+                title="Ebda Team Player" 
+                frameborder="0" 
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+                allowfullscreen 
+                style="border-radius: 20px; border: none;">
+            </iframe>`;
         
         window.scrollTo({ top: 0, behavior: 'smooth' });
     }
     
-    // إغلاق المنيو عند الضغط على الأوفرلاي
     document.getElementById('overlay').addEventListener('click', toggleSidebar);
 </script>
 </body>
 </html>
+    
