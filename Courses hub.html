@@ -319,6 +319,16 @@
         .quiz-btn:hover i {
             transform: rotate(20deg);
         }
+        /* الحركة دي بتعمل زوم داخلي للفيديو جوه الصفحة بتاعتك */
+iframe {
+    transform: scale(1.3); /* بيكبر الفيديو جوه البرواز بتاعه */
+    transform-origin: center;
+    object-fit: cover; /* بيخلي الفيديو يملأ المساحة */
+}
+
+.video-player-placeholder {
+    overflow: hidden; /* عشان الزيادة اللي كبرناها متطلعش بره المربع */
+}
     </style>
 </head>
 <body class="course-page">
